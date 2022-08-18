@@ -2922,8 +2922,6 @@
           }
         },
         "required": [
-          "id",
-          "type"
         ]
       },
       "Gps": {
@@ -3242,26 +3240,7 @@
           "tags": {
             "$ref": "#/components/schemas/Tags"
           }
-        },
-        "required": [
-          "id",
-          "descriptor",
-          "price",
-          "category_id",
-          "fulfillment_id",
-          "location_id",
-          "matched",
-          "@ondc/org/returnable",
-          "@ondc/org/cancellable",
-          "@ondc/org/return_window",
-          "@ondc/org/seller_pickup_return",
-          "@ondc/org/time_to_ship",
-          "@ondc/org/available_on_cod",
-          "@ondc/org/contact_details_consumer_care",
-          "@ondc/org/statutory_reqs_packaged_commodities",
-          "@ondc/org/statutory_reqs_prepackaged_food",
-          "@ondc/org/mandatory_reqs_veggies_fruits"
-        ]
+        }
       },
       "Language": {
         "description": "indicates language code. ONDC supports language codes as per ISO 639.2 standard",

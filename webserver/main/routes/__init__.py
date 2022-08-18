@@ -5,7 +5,6 @@ from flask_restx import Api as BaseAPI
 from jsonschema import ValidationError
 from werkzeug.exceptions import BadRequest
 
-from main.logger.custom_logging import log
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
 from main.routes.cancel import cancel_namespace
