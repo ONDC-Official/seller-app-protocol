@@ -1,0 +1,51 @@
+version: '2'
+
+services:
+
+  bpp-protocol-webserver:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: bpp-protocol-webserver
+    depends_on:
+      - rabbitmq
+    environment:
+      ENV: prod
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+    expose:
+      - 5555
+    ports:
+      - 5555:5555
+    networks:
+      - rabbitmq_go_net
+
+  bpp-protocol-consumer:
+    build:
+      context: .
+      dockerfile: consumer_dockerfile
+    container_name: bpp-protocol-consumer
+    depends_on:
+      - rabbitmq
+    environment:
+      ENV: prod
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+    networks:
+      - rabbitmq_go_net
+
+
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq_go_net
+
+networks:
+  rabbitmq_go_net:
+    driver: bridge

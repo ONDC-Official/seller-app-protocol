@@ -1,10 +1,12 @@
 import pika
 
+from main.config import get_config_by_name
 from main.logger.custom_logging import log, log_error
 
 
 def open_connection():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    rabbitmq_host = get_config_by_name('RABBITMQ_HOST')
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
     return connection
 
 

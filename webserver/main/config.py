@@ -32,6 +32,7 @@ class Config:
     BAP_PRIVATE_KEY = "some-key"
     BAP_KEY_ID = "default-key"
     RABBITMQ_QUEUE_NAME = "bpp_protocol"
+    RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
     BPP_CLIENT_ENDPOINT = "http://client-endpoint"
 
 

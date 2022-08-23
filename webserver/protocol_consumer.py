@@ -12,7 +12,13 @@ def consume_fn(message_string):
     send_bpp_responses_to_bg_or_bpp(request_type, payload)
 
 
-queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
-channel = create_channel()
-declare_queue(channel, queue_name)
-consume_message(channel, queue_name=queue_name, consume_fn=consume_fn)
+def run_consumer():
+    queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
+    channel = create_channel()
+    declare_queue(channel, queue_name)
+    consume_message(channel, queue_name=queue_name, consume_fn=consume_fn)
+
+
+if __name__ == "__main__":
+    run_consumer()
+
