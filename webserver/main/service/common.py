@@ -7,12 +7,13 @@ from main.utils.webhook_utils import post_on_bg_or_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, publish_message_to_queue
 
 channel = create_channel()
-declare_queue(channel, 'bpp_protocol')
+queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
+declare_queue(channel, queue_name)
 
 
 def send_message_to_queue_for_given_request(request_type, payload):
     payload['request_type'] = request_type
-    publish_message_to_queue(channel, exchange='', routing_key='bpp_protocol', body=json.dumps(payload))
+    publish_message_to_queue(channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
 
 
 def send_bpp_responses_to_bg_or_bpp(request_type, payload):
