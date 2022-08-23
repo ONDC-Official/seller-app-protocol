@@ -1,15 +1,16 @@
 import json
-
 import requests
+
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
 from main.utils.webhook_utils import post_on_bg_or_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, publish_message_to_queue
 
+channel = create_channel()
+declare_queue(channel, 'bpp_protocol')
+
 
 def send_message_to_queue_for_given_request(request_type, payload):
-    channel = create_channel()
-    declare_queue(channel, 'bpp_protocol')
     payload['request_type'] = request_type
     publish_message_to_queue(channel, exchange='', routing_key='bpp_protocol', body=json.dumps(payload))
 
