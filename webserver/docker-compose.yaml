@@ -11,7 +11,7 @@ services:
       - rabbitmq
     environment:
       ENV: prod
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_HOST: rabbitmq:5672
     expose:
       - 5555
     ports:
@@ -28,7 +28,7 @@ services:
       - rabbitmq
     environment:
       ENV: prod
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_HOST: rabbitmq:5672
     networks:
       - rabbitmq_go_net
 

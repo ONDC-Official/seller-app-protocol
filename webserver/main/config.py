@@ -33,7 +33,7 @@ class Config:
     BAP_KEY_ID = "default-key"
     RABBITMQ_QUEUE_NAME = "bpp_protocol"
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
-    BPP_CLIENT_ENDPOINT = "http://client-endpoint"
+    BPP_CLIENT_ENDPOINT = "https://f478-103-207-8-110.ngrok.io/api/product"
 
 
 class DevelopmentConfig(Config):
