@@ -23,33 +23,44 @@ class Config:
     JWT_QUERY_STRING_NAME = "token"
     # Set the secret key to sign the JWTs with
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-    BAP_DOMAIN = "nic2004:52110"
-    BAP_CITY_CODE = "std:080"
-    BAP_COUNTRY_CODE = "IND"
-    BAP_ID = "box.beckn.org"
+    DOMAIN = "nic2004:52110"
+    CITY_CODE = "std:080"
+    COUNTRY_CODE = "IND"
     BAP_TTL = "20"
     BECKN_SECURITY_ENABLED = False
-    BAP_PRIVATE_KEY = "some-key"
-    BAP_KEY_ID = "default-key"
-    RABBITMQ_QUEUE_NAME = "bpp_protocol"
+    BPP_PRIVATE_KEY = os.getenv("BPP_PRIVATE_KEY", "some-key")
+    BPP_PUBLIC_KEY = os.getenv("BPP_PUBLIC_KEY", "some-key")
+    BPP_ID = os.getenv("BPP_ID", "buyer-app.ondc.org")
+    BPP_URI = os.getenv("BPP_URI", "buyer-app.ondc.org")
+    BPP_UNIQUE_KEY_ID = os.getenv("BPP_UNIQUE_KEY_ID", "207")
+    RABBITMQ_QUEUE_NAME = os.getenv("BPP_UNIQUE_KEY_ID", "bpp_protocol")
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
-    BPP_CLIENT_ENDPOINT = "https://f478-103-207-8-110.ngrok.io/api/product"
+    BPP_CLIENT_ENDPOINT = os.getenv("BPP_CLIENT_ENDPOINT", "client")
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     ENV = True
     RABBITMQ_HOST = "localhost"
+    REGISTRY_BASE_URL = "https://pilot-gateway-1.beckn.nsdl.co.in"
 
 
 class ProductionConfig(Config):
     DEBUG = False
     RABBITMQ_HOST = "rabbitmq"
+    REGISTRY_BASE_URL = "https://pilot-gateway-1.beckn.nsdl.co.in"
+
+
+class PreProductionConfig(Config):
+    DEBUG = False
+    RABBITMQ_HOST = "rabbitmq"
+    REGISTRY_BASE_URL = "https://preprod.registry.ondc.org/ondc"
 
 
 config_by_name = dict(
     dev=DevelopmentConfig,
     prod=ProductionConfig,
+    pre_prod=PreProductionConfig,
 )
 
 key = Config.SECRET_KEY
