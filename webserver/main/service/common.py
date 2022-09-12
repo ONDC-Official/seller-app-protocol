@@ -21,6 +21,7 @@ def send_bpp_responses_to_bg_or_bpp(request_type, payload):
     # log(f"Client responses {client_responses}")
     status_code = post_on_bg_or_bap(f"{payload['context']['bap_uri']}/{client_responses['context']['action']}",
                                     client_responses)
+    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}", json=payload)
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 

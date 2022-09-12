@@ -6,7 +6,7 @@ from main.logger.custom_logging import log, log_error
 
 def open_connection():
     rabbitmq_host = get_config_by_name('RABBITMQ_HOST')
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, heartbeat=10))
     return connection
 
 
