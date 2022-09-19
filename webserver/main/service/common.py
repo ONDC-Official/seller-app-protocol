@@ -5,6 +5,7 @@ from retry import retry
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
+from main.utils.decorators import check_for_exception
 from main.utils.webhook_utils import post_on_bg_or_bap
 from main.utils.rabbitmq_utils import declare_queue, publish_message_to_queue, close_connection, \
     open_connection_and_channel_if_not_already_open
@@ -23,6 +24,7 @@ def send_message_to_queue_for_given_request(request_type, payload):
     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
 
 
+@check_for_exception
 def send_bpp_responses_to_bg_or_bpp(request_type, payload):
     client_responses = get_responses_from_client(request_type, payload)
     # log(f"Client responses {client_responses}")
