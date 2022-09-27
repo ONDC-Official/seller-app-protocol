@@ -5,6 +5,7 @@ from retry import retry
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
+from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 from main.utils.webhook_utils import post_on_bg_or_bap
@@ -34,8 +35,10 @@ def send_bpp_responses_to_bg_or_bpp(request_type, payload):
         if gateway_or_bap_endpoint.endswith("/") \
         else f"{gateway_or_bap_endpoint}/{client_responses['context']['action']}"
 
-    status_code = post_on_bg_or_bap(url_with_route, client_responses)
-    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}", json=payload)
+    auth_header = create_authorisation_header(client_responses)
+    status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
+    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
+    #                             payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
