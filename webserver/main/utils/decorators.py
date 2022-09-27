@@ -9,6 +9,7 @@ import traceback
 #         return expects_json(*args, **kwargs)
 #     except:
 #         print("comig here")
+from main.logger.custom_logging import log_error
 
 
 def check_for_exception(func):
@@ -16,7 +17,7 @@ def check_for_exception(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            traceback.print_exc()
+            log_error("Something went wrong!")
             return {"error": str(e)}
 
     return _wrapper
