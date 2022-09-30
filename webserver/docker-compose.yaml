@@ -11,13 +11,16 @@ services:
       - rabbitmq
     environment:
       ENV: prod
-      RABBITMQ_HOST: rabbitmq:5672
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
+      BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
+      BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
+      BPP_ID: ${BPP_ID}
     expose:
       - 5555
     ports:
       - 5555:5555
-    networks:
-      - rabbitmq_go_net
+
 
   bpp-protocol-consumer:
     build:
@@ -28,9 +31,12 @@ services:
       - rabbitmq
     environment:
       ENV: prod
-      RABBITMQ_HOST: rabbitmq:5672
-    networks:
-      - rabbitmq_go_net
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
+      BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
+      BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
+      BPP_ID: ${BPP_ID}
+      BPP_CLIENT_ENDPOINT: ${BPP_CLIENT_ENDPOINT}
 
 
   rabbitmq:
@@ -43,9 +49,3 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-      - rabbitmq_go_net
-
-networks:
-  rabbitmq_go_net:
-    driver: bridge
