@@ -30,9 +30,9 @@ class Config:
     BECKN_SECURITY_ENABLED = False
     BPP_PRIVATE_KEY = os.getenv("BPP_PRIVATE_KEY", "some-key")
     BPP_PUBLIC_KEY = os.getenv("BPP_PUBLIC_KEY", "some-key")
-    BPP_ID = os.getenv("BPP_ID", "buyer-app.ondc.org")
-    BPP_URI = os.getenv("BPP_URI", "buyer-app.ondc.org")
-    BPP_UNIQUE_KEY_ID = os.getenv("BPP_UNIQUE_KEY_ID", "207")
+    BPP_ID = os.getenv("BPP_ID", "sellerapp-staging.datasyndicate.in")
+    BPP_URI = os.getenv("BPP_URI", "https://sellerapp-staging.datasyndicate.in/")
+    BPP_UNIQUE_KEY_ID = os.getenv("BPP_UNIQUE_KEY_ID", "351")
     RABBITMQ_QUEUE_NAME = os.getenv("BPP_UNIQUE_KEY_ID", "bpp_protocol")
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
     BPP_CLIENT_ENDPOINT = os.getenv("BPP_CLIENT_ENDPOINT", "client")
