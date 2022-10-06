@@ -2306,8 +2306,7 @@
         },
         "required": [
           "name",
-          "phone",
-          "tax_number"
+          "phone"
         ]
       },
       "Cancellation": {
