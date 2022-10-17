@@ -3966,9 +3966,7 @@
           }
         },
         "required": [
-          "@ondc/org/item_id",
-          "@ondc/org/item_quantity",
-          "@ondc/org/title_type",
+          "breakup",
           "price"
         ]
       },
