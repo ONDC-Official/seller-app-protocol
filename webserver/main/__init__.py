@@ -9,5 +9,6 @@ def create_app(config_name):
     app.config.from_object(config_by_name[config_name])
     app.app_context().push()
     api.init_app(app)
+    init_database()
     CORS(app)
     return app

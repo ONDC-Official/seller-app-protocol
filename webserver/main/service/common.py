@@ -1,29 +1,29 @@
 import json
 import requests
-from pika.exceptions import StreamLostError
-from retry import retry
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
+from main.models import get_mongo_collection
+from main.models.error import DatabaseError
+from main.repository import mongo
+from main.repository.ack_response import get_ack_response
 from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 from main.utils.webhook_utils import post_on_bg_or_bap
-from main.utils.rabbitmq_utils import declare_queue, publish_message_to_queue, close_connection, \
-    open_connection_and_channel_if_not_already_open
 
-rabbitmq_connection, rabbitmq_channel = None, None
-
-
-@retry(StreamLostError, tries=3, delay=1, jitter=(1, 3))
-def send_message_to_queue_for_given_request(request_type, payload):
-    global rabbitmq_connection, rabbitmq_channel
-    rabbitmq_connection, rabbitmq_channel = open_connection_and_channel_if_not_already_open(rabbitmq_connection,
-                                                                                            rabbitmq_channel)
-    queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
-    declare_queue(rabbitmq_channel, queue_name)
-    payload['request_type'] = request_type
-    publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
+# rabbitmq_connection, rabbitmq_channel = None, None
+#
+#
+# @retry(StreamLostError, tries=3, delay=1, jitter=(1, 3))
+# def send_message_to_queue_for_given_request(request_type, payload):
+#     global rabbitmq_connection, rabbitmq_channel
+#     rabbitmq_connection, rabbitmq_channel = open_connection_and_channel_if_not_already_open(rabbitmq_connection,
+#                                                                                             rabbitmq_channel)
+#     queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
+#     declare_queue(rabbitmq_channel, queue_name)
+#     payload['request_type'] = request_type
+#     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
 
 
 @check_for_exception
@@ -47,3 +47,11 @@ def get_responses_from_client(request_type, payload):
     response = requests.post(f"{client_endpoint}/{request_type}", json=payload)
     return json.loads(response.text)
 
+
+def dump_request_payload(request_payload, request_type):
+    collection_name = get_mongo_collection(request_type)
+    is_successful = mongo.collection_insert_one(collection_name, request_payload)
+    if is_successful:
+        return get_ack_response(ack=True)
+    else:
+        return get_ack_response(ack=False, error=DatabaseError.ON_WRITE_ERROR.value)

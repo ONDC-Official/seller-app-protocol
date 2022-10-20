@@ -4,6 +4,7 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
+from main.service.select_service import make_logistics_search_or_send_bpp_failure_response, send_select_response_to_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp
@@ -12,7 +13,12 @@ from main.service.common import send_bpp_responses_to_bg_or_bpp
 def consume_fn(message_string):
     payload = json.loads(message_string)
     request_type = payload.pop('request_type')
-    send_bpp_responses_to_bg_or_bpp(request_type, payload)
+    if request_type == "search":
+        send_bpp_responses_to_bg_or_bpp(request_type, payload)
+    elif request_type == "select_1":
+        make_logistics_search_or_send_bpp_failure_response(payload)
+    elif request_type == "select_2":
+        send_select_response_to_bap(payload)
 
 
 @retry(AMQPConnectionError, delay=5, jitter=(1, 3))
