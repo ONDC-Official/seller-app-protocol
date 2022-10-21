@@ -10,7 +10,7 @@ rabbitmq_connection, rabbitmq_channel = None, None
 
 
 @retry(StreamLostError, tries=3, delay=1, jitter=(1, 3))
-def send_message_to_queue_for_given_request(request_type, transaction_id, time_to_process=0, properties=None):
+def send_message_to_queue_for_given_request(request_type, transaction_id, properties=None):
     global rabbitmq_connection, rabbitmq_channel
     rabbitmq_connection, rabbitmq_channel = open_connection_and_channel_if_not_already_open(rabbitmq_connection,
                                                                                             rabbitmq_channel)
@@ -18,8 +18,7 @@ def send_message_to_queue_for_given_request(request_type, transaction_id, time_t
     declare_queue(rabbitmq_channel, queue_name)
     payload = {
         "request_type": request_type,
-        "transaction_id": transaction_id,
-        "time_to_process": time_to_process
+        "transaction_id": transaction_id
     }
-    publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload),
+    publish_message_to_queue(rabbitmq_channel, exchange='test-x', routing_key=queue_name, body=json.dumps(payload),
                              properties=properties)

@@ -38,9 +38,9 @@ def create_channel(connection):
 
 
 def declare_queue(channel, queue_name):
-    # channel.exchange_declare("test-x", exchange_type="x-delayed-message", arguments={"x-delayed-type": "direct"})
+    channel.exchange_declare("test-x", exchange_type="x-delayed-message", arguments={"x-delayed-type": "direct"})
     channel.queue_declare(queue=queue_name)
-    # channel.queue_bind(queue=queue_name, exchange="test-x", routing_key="task_queue")
+    channel.queue_bind(queue=queue_name, exchange="test-x", routing_key=queue_name)
 
 
 # @retry(3, errors=StreamLostError)
@@ -57,25 +57,11 @@ def consume_message(connection, channel, queue_name, consume_fn):
         except:
             log_error(f"Something went wrong for {body} !")
 
-    def negative_callback(ch, delivery_tag, body, requeue=True):
-        try:
-            channel.basic_reject(delivery_tag, requeue=requeue)
-            log(f"Nack message {body} !")
-        except:
-            log_error(f"Something went wrong for {body} !")
-
-    def check_if_time_to_process(time_to_process):
-        return time.time() >= time_to_process
-
     def do_work(delivery_tag, body):
         thread_id = threading.get_ident()
         log(f'Thread id: {thread_id} Delivery tag: {delivery_tag} Message body: {body}')
-        payload = json.loads(body)
-        if check_if_time_to_process(payload.get('time_to_process', 0)):
-            cb = functools.partial(callback, channel, delivery_tag, body)
-            consume_fn(body)
-        else:
-            cb = functools.partial(negative_callback, channel, delivery_tag, body, True)
+        cb = functools.partial(callback, channel, delivery_tag, body)
+        consume_fn(body)
         connection.add_callback_threadsafe(cb)
 
     def on_message(ch, method_frame, header_frame, body):

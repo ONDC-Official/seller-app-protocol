@@ -4,6 +4,7 @@ import time
 import pika
 
 from main import constant
+from main.config import get_config_by_name
 from main.logger.custom_logging import log
 from main.service import send_message_to_queue_for_given_request
 from main.utils.cryptic_utils import create_authorisation_header
@@ -142,7 +143,7 @@ def make_logistics_search_payload_request_to_client(select_payload):
         "action": "search",
         "core_version": "1.0.0",
         "bap_id": "sellerapp-staging.datasyndicate.in",
-        "bap_uri": "https://4c62-103-115-201-50.in.ngrok.io/protocol/v1",
+        "bap_uri": "https://85ec-103-115-201-50.in.ngrok.io/protocol/v1",
         "transaction_id": "9fdb667c-76c6-456a-9742-ba9caa5eb765",
         "message_id": "1651742565654",
         "timestamp": "2022-06-13T07:22:45.363Z",
@@ -241,7 +242,10 @@ def make_logistics_search_or_send_bpp_failure_response(payload):
     return_code, search_payload_or_select_response = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
         make_logistics_search_request(search_payload_or_select_response)
-        send_message_to_queue_for_given_request("select_2", transaction_id, time_to_process=time.time()+2)
+        send_message_to_queue_for_given_request("select_2", transaction_id,
+                                                properties=pika.BasicProperties(headers={
+                                                    "x-delay": get_config_by_name("LOGISTICS_ON_SEARCH_WAIT")*1000,
+                                                }))
     else:
         url_with_route = ""
         send_on_select_to_bap(url_with_route, search_payload_or_select_response)
