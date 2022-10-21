@@ -4,10 +4,14 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
+from main.models import init_database
 from main.service.select_service import make_logistics_search_or_send_bpp_failure_response, send_select_response_to_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp
+
+
+init_database()
 
 
 def consume_fn(message_string):

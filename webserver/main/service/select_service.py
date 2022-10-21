@@ -6,6 +6,8 @@ import pika
 from main import constant
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
+from main.models import get_mongo_collection
+from main.repository import mongo
 from main.service import send_message_to_queue_for_given_request
 from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
@@ -236,33 +238,43 @@ def send_on_select_to_bap(url_with_route, payload):
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
-def make_logistics_search_or_send_bpp_failure_response(payload):
-    log(f"select_1 payload: {payload}")
-    select_payload = {}
+def make_logistics_search_or_send_bpp_failure_response(message):
+    log(f"select_1 payload: {message}")
+    select_message_id = message['message_ids']['select']
+    select_collection = get_mongo_collection('select')
+    select_payload = mongo.collection_find_one(select_collection, {"context.message_id": select_message_id})
     return_code, search_payload_or_select_response = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
         search_message_id = search_payload_or_select_response[constant.CONTEXT]['message_id']
         make_logistics_search_request(search_payload_or_select_response)
-        payload['request_type'] = "select_2"
-        payload['message_ids']['logistics_search'] = search_message_id
-        send_message_to_queue_for_given_request(payload,
+        message['request_type'] = "select_2"
+        message['message_ids']['logistics_search'] = search_message_id
+        send_message_to_queue_for_given_request(message,
                                                 properties=pika.BasicProperties(headers={
                                                     "x-delay": get_config_by_name("LOGISTICS_ON_SEARCH_WAIT")*1000,
                                                 }))
     else:
-        url_with_route = ""
+        bap_endpoint = select_payload['context']['bap_uri']
+        url_with_route = f"{bap_endpoint}on_select" if bap_endpoint.endswith("/") else f"{bap_endpoint}/on_select"
         send_on_select_to_bap(url_with_route, search_payload_or_select_response)
 
 
-def send_select_response_to_bap(old_payload):
-    log(f"select_2 payload: {old_payload}")
-    # transaction_id = payload['transaction_id']
+def send_select_response_to_bap(message):
+    log(f"select_2 payload: {message}")
+    select_message_id = message['message_ids']['select']
+    logistics_search_message_id = message['message_ids']['logistics_search']
+    select_collection = get_mongo_collection('select')
+    logistics_search_collection = get_mongo_collection('logistics_on_search')
     payload = {
-        "select_payload": "",
-        "on_search_payload": []
+        "select_payload": mongo.collection_find_one(select_collection, {"context.message_id": select_message_id}),
+        "on_search_payload": mongo.collection_find_all(logistics_search_collection,
+                                                       {"context.message_id": logistics_search_message_id})
     }
-    url_with_route = ""
+    print(f"final_payload {payload}")
     status_code, select_resp = make_select_request_to_client(payload)
+
+    bap_endpoint = select_resp['context']['bap_uri']
+    url_with_route = f"{bap_endpoint}on_select" if bap_endpoint.endswith("/") else f"{bap_endpoint}/on_select"
     send_on_select_to_bap(url_with_route, select_resp)
 
 
