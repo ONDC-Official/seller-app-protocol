@@ -1,21 +1,7 @@
-import json
-from flask import request, g
 from pymongo import MongoClient
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
-
-
-class JsonObject:
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
-
-
-def initialize_before_calls(app):
-    @app.before_request
-    def set_page(page=1):
-        page = int(request.args.get('page', 1))
-        g.page = page
 
 
 def init_database():
