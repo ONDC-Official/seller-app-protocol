@@ -12,7 +12,7 @@ from main.service.common import send_bpp_responses_to_bg_or_bpp
 
 def consume_fn(message_string):
     payload = json.loads(message_string)
-    request_type = payload.pop('request_type')
+    request_type = payload.get('request_type')
     if request_type == "search":
         send_bpp_responses_to_bg_or_bpp(request_type, payload)
     elif request_type == "select_1":

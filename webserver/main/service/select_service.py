@@ -237,12 +237,15 @@ def send_on_select_to_bap(url_with_route, payload):
 
 
 def make_logistics_search_or_send_bpp_failure_response(payload):
-    transaction_id = payload["transaction_id"]
+    log(f"select_1 payload: {payload}")
     select_payload = {}
     return_code, search_payload_or_select_response = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
+        search_message_id = search_payload_or_select_response[constant.CONTEXT]['message_id']
         make_logistics_search_request(search_payload_or_select_response)
-        send_message_to_queue_for_given_request("select_2", transaction_id,
+        payload['request_type'] = "select_2"
+        payload['message_ids']['logistics_search'] = search_message_id
+        send_message_to_queue_for_given_request(payload,
                                                 properties=pika.BasicProperties(headers={
                                                     "x-delay": get_config_by_name("LOGISTICS_ON_SEARCH_WAIT")*1000,
                                                 }))
@@ -252,6 +255,7 @@ def make_logistics_search_or_send_bpp_failure_response(payload):
 
 
 def send_select_response_to_bap(old_payload):
+    log(f"select_2 payload: {old_payload}")
     # transaction_id = payload['transaction_id']
     payload = {
         "select_payload": "",

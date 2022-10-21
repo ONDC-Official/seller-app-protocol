@@ -24,7 +24,13 @@ class SelectOrder(Resource):
         payload = request.get_json()
         dump_request_payload(payload, "select")
         # send_message_to_queue_for_given_request('select', g.data)
-        send_message_to_queue_for_given_request("select_1", payload[constant.CONTEXT]["transaction_id"],
+        message = {
+            "request_type": "select_1",
+            "message_ids": {
+                "select": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message,
                                                 properties=pika.BasicProperties(headers={
                                                     "x-delay": 0
                                                 }))
