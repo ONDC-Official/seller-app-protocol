@@ -21,18 +21,14 @@ class SelectOrder(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/select')
         resp = get_ack_response(ack=True)
-        payload = request.get_json()
+        payload = g.data
         dump_request_payload(payload, "select")
-        # send_message_to_queue_for_given_request('select', g.data)
         message = {
             "request_type": "select_1",
             "message_ids": {
                 "select": payload[constant.CONTEXT]["message_id"]
             }
         }
-        send_message_to_queue_for_given_request(message,
-                                                properties=pika.BasicProperties(headers={
-                                                    "x-delay": 0
-                                                }))
+        send_message_to_queue_for_given_request(message)
         validate(resp, response_schema)
         return resp
