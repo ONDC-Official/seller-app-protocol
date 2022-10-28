@@ -27,7 +27,12 @@ from main.utils.webhook_utils import post_on_bg_or_bap
 
 
 @check_for_exception
-def send_bpp_responses_to_bg_or_bpp(request_type, payload):
+def send_bpp_responses_to_bg_or_bpp(message):
+    request_type = message['request_type']
+    log(f"{request_type} payload: {message}")
+    message_id = message['message_ids'][request_type]
+    mongo_collection = get_mongo_collection(request_type)
+    payload = mongo.collection_find_one(mongo_collection, {"context.message_id": message_id})
     client_responses = get_responses_from_client(request_type, payload)
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if request_type == "search" else \
         payload['context']['bap_uri']
@@ -36,9 +41,9 @@ def send_bpp_responses_to_bg_or_bpp(request_type, payload):
         else f"{gateway_or_bap_endpoint}/{client_responses['context']['action']}"
 
     auth_header = create_authorisation_header(client_responses)
-    status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
-    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
-    #                             payload, headers={'Authorization': auth_header})
+    # status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
+    status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
+                                payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 

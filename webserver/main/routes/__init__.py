@@ -12,7 +12,7 @@ from main.repository.ack_response import get_ack_response
 # from main.routes.confirm import confirm_namespace
 # from main.routes.init import init_namespace
 # from main.routes.rating import rating_namespace
-# from main.routes.search import search_namespace
+from main.routes.search import search_namespace
 from main.routes.logistics_search import logistics_search_namespace
 from main.routes.select import select_namespace
 # from main.routes.status import status_namespace
@@ -65,7 +65,7 @@ def bad_request(error):
 # api.add_namespace(confirm_namespace, path='/protocol')
 # api.add_namespace(init_namespace, path='/protocol')
 # api.add_namespace(rating_namespace, path='/protocol')
-# api.add_namespace(search_namespace, path='/protocol')
+api.add_namespace(search_namespace, path='/protocol')
 api.add_namespace(select_namespace, path='/protocol')
 # api.add_namespace(status_namespace, path='/protocol')
 # api.add_namespace(support_namespace, path='/protocol')
