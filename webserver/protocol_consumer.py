@@ -23,6 +23,8 @@ def consume_fn(message_string):
         make_logistics_search_or_send_bpp_failure_response(payload)
     elif request_type == "select_2":
         send_select_response_to_bap(payload)
+    else:
+        send_bpp_responses_to_bg_or_bpp(payload)
 
 
 @retry(AMQPConnectionError, delay=5, jitter=(1, 3))
