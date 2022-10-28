@@ -41,9 +41,9 @@ def send_bpp_responses_to_bg_or_bpp(message):
         else f"{gateway_or_bap_endpoint}/{client_responses['context']['action']}"
 
     auth_header = create_authorisation_header(client_responses)
-    # status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
-    status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
-                                payload, headers={'Authorization': auth_header})
+    status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
+    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
+    #                             json=payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
