@@ -32,7 +32,7 @@ def make_select_request_to_client(select_payload):
     "context": {
         "action": "on_select",
         "bap_id": "ondc.paytm.com",
-        "bap_uri": "https://ondc.paytm.com/retail",
+        "bap_uri": "https://webhook.site/b8f217b0-e703-48c5-adbd-75dde35ce03b",
         "bpp_id": "ondc.gofrugal.com/ondc/18275",
         "bpp_uri": "https://ondc.gofrugal.com/ondc/seller/adaptor",
         "city": "std:080",
@@ -145,7 +145,7 @@ def make_logistics_search_payload_request_to_client(select_payload):
         "action": "search",
         "core_version": "1.0.0",
         "bap_id": "sellerapp-staging.datasyndicate.in",
-        "bap_uri": "https://85ec-103-115-201-50.in.ngrok.io/protocol/v1",
+        "bap_uri": "https://d391-103-115-201-50.in.ngrok.io/protocol/v1",
         "transaction_id": "9fdb667c-76c6-456a-9742-ba9caa5eb765",
         "message_id": "1651742565654",
         "timestamp": "2022-06-13T07:22:45.363Z",
@@ -233,8 +233,7 @@ def send_on_select_to_bap(url_with_route, payload):
     auth_header = create_authorisation_header(payload)
     # status_code = post_on_bg_or_bap(url_with_route, payload, headers={'Authorization': auth_header})
     import requests
-    status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/on_select",
-                                json=payload, headers={'Authorization': auth_header})
+    status_code = requests.post(url_with_route, json=payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
@@ -270,7 +269,6 @@ def send_select_response_to_bap(message):
         "on_search_payload": mongo.collection_find_all(logistics_search_collection,
                                                        {"context.message_id": logistics_search_message_id})
     }
-    print(f"final_payload {payload}")
     status_code, select_resp = make_select_request_to_client(payload)
 
     bap_endpoint = select_resp['context']['bap_uri']
@@ -279,72 +277,8 @@ def send_select_response_to_bap(message):
 
 
 if __name__ == "__main__":
-    make_logistics_search_or_send_bpp_failure_response(json.loads('''
-    {
-"context":
-{
-"domain": "nic2004:52110",
-"action": "select",
-"core_version": "1.0.0",
-"bap_id": "ondc.paytm.com",
-"bap_uri": "https://ondc.paytm.com/retail",
-"bpp_id": "ondc.gofrugal.com/ondc/18275",
-"bpp_uri": "https://ondc.gofrugal.com/ondc/seller/adaptor",
-"transaction_id": "9fdb667c-76c6-456a-9742-ba9caa5eb765",
-"message_id": "1652092268191",
-"city": "std:080",
-"country": "IND",
-"timestamp": "2022-05-09T10:31:08.201Z",
-"ttl": "PT30S"
-},
-"message":
-{
-"order":
-{
-"provider":
-{
-"id": "18275-ONDC-1-11094",
-"locations":
-[
-   {
-
-"id": "18275-ONDC-1-11094"
-   }
-]
-},
-"items":
-[
-{
-"id": "18275-ONDC-1-9",
-"location_id": "abc-store-location-id-1",
-"quantity":
-{
-"count": 1
-},
-"price":
-{
-"currency": "INR",
-"value": 5.0
-}
-}
-],
-"fulfillments":
-[
-{
-               "end":
-  {
-                   "location" :
-      {
-                       "gps" : "12.4535445,77.9283792",
-	          "address":
-	          {
-		 "area_code": "560001"
-	          			          }
-                   	      }
-               }
-            }
-            ]
-}
-}
-}
-    '''))
+    search_payload_or_select_response1 = make_logistics_search_payload_request_to_client({})
+    post_on_bg_or_bap("https://webhook.site/b8c0ef18-f162-417b-95bf-3d62352f271b/search",
+                      search_payload_or_select_response1)
+    search_message_id1 = search_payload_or_select_response1[constant.CONTEXT]['message_id']
+    make_logistics_search_request(search_payload_or_select_response1)
