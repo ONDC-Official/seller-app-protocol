@@ -33,7 +33,7 @@ def send_bpp_responses_to_bg_or_bpp(message):
     message_id = message['message_ids'][request_type]
     mongo_collection = get_mongo_collection(request_type)
     payload = mongo.collection_find_one(mongo_collection, {"context.message_id": message_id})
-    client_responses = get_responses_from_client(request_type, payload)
+    client_responses, _ = get_responses_from_client(request_type, payload)
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if request_type == "search" else \
         payload['context']['bap_uri']
     url_with_route = f"{gateway_or_bap_endpoint}{client_responses['context']['action']}" \
@@ -50,7 +50,7 @@ def send_bpp_responses_to_bg_or_bpp(message):
 def get_responses_from_client(request_type, payload):
     client_endpoint = get_config_by_name('BPP_CLIENT_ENDPOINT')
     response = requests.post(f"{client_endpoint}/{request_type}", json=payload)
-    return json.loads(response.text)
+    return json.loads(response.text), response.status_code
 
 
 def dump_request_payload(request_payload, request_type):
