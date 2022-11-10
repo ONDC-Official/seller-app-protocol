@@ -16,6 +16,12 @@ services:
       BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
       BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
       BPP_ID: ${BPP_ID}
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
+      PG_DATABASE: ${PG_DATABASE}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      FLASK_SERVER: True
     expose:
       - 5555
     ports:
@@ -35,8 +41,14 @@ services:
       BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
       BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
       BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
-      BPP_ID: ${BPP_ID}
       BPP_CLIENT_ENDPOINT: ${BPP_CLIENT_ENDPOINT}
+      BPP_ID: ${BPP_ID}
+      PG_HOST: ${PG_HOST}
+      PG_PORT: ${PG_PORT}
+      PG_DATABASE: ${PG_DATABASE}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      FLASK_SERVER: False
 
 
   rabbitmq:
@@ -53,10 +65,17 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
 
-  mongo:
-    image: mongo
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
     restart: always
+    expose:
+      - 5432
     ports:
-      - 27017:27017
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USER}
     volumes:
-      - './data:/data/db'
+      - ./postgres-data:/var/lib/postgresql/data
