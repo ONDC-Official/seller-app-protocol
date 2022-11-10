@@ -4,6 +4,7 @@ from flask_restx import Namespace, Resource, reqparse
 from jsonschema import validate
 
 from main import constant
+from main.models.ondc_request import OndcDomain
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
@@ -21,7 +22,7 @@ class CancellationReasons(Resource):
         response_schema = get_json_schema_for_response('/cancellation_reasons')
         resp = get_ack_response(ack=True)
         payload = g.data
-        dump_request_payload(payload, "cancellation_reasons")
+        dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": "cancellation_reasons",
             "message_ids": {

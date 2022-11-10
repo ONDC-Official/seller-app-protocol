@@ -11,7 +11,7 @@ from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_mes
 from main.service.common import send_bpp_responses_to_bg_or_bpp
 
 
-init_database()
+# init_database()
 
 
 def consume_fn(message_string):

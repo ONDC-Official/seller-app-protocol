@@ -3,6 +3,7 @@ from flask_expects_json import expects_json
 from flask_restx import Namespace, Resource
 from jsonschema import validate
 
+from main.models.ondc_request import OndcDomain
 from main.repository.ack_response import get_ack_response
 from main.service.common import dump_request_payload
 from main.utils.schema_utils import get_json_schema_for_given_path, get_json_schema_for_response
@@ -19,7 +20,7 @@ class SearchCatalogues(Resource):
         response_schema = get_json_schema_for_response('/on_search', domain="logistics")
         resp = get_ack_response(ack=True)
         payload = request.get_json()
-        dump_request_payload(payload, "logistics_on_search")
+        dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value)
         validate(resp, response_schema)
         return resp
 

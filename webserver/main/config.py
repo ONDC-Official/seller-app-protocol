@@ -28,6 +28,7 @@ class Config:
     COUNTRY_CODE = "IND"
     BAP_TTL = "20"
     BECKN_SECURITY_ENABLED = False
+    SQLALCHEMY_POOL_SIZE = int(os.getenv("SQLALCHEMY_POOL_SIZE", "2"))
     BPP_PRIVATE_KEY = os.getenv("BPP_PRIVATE_KEY", "some-key")
     BPP_PUBLIC_KEY = os.getenv("BPP_PUBLIC_KEY", "some-key")
     BPP_ID = os.getenv("BPP_ID", "sellerapp-staging.datasyndicate.in")
@@ -39,6 +40,11 @@ class Config:
     BG_DEFAULT_URL = os.getenv("BG_DEFAULT_URL", "https://pilot-gateway-1.beckn.nsdl.co.in/")
     BG_DEFAULT_URL_FLAG = os.getenv("BG_DEFAULT_URL_FLAG", "True") == "True"
     LOGISTICS_ON_SEARCH_WAIT = int(os.getenv("LOGISTICS_ON_SEARCH_WAIT", "3"))
+    PG_HOST = os.getenv('PG_HOST', 'localhost')
+    PG_PORT = os.getenv('PG_PORT', '5432')
+    PG_DATABASE = os.getenv('PG_DATABASE', 'practice')
+    PG_USER = os.getenv('PG_USER', 'postgres')
+    PG_PASSWORD = os.getenv('PG_PASSWORD', 'postgres')
 
 
 class DevelopmentConfig(Config):

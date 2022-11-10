@@ -5,6 +5,7 @@ from flask_restx import Namespace, Resource, reqparse
 from jsonschema import validate
 
 from main import constant
+from main.models.ondc_request import OndcDomain
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
@@ -22,7 +23,7 @@ class SelectOrder(Resource):
         response_schema = get_json_schema_for_response('/select')
         resp = get_ack_response(ack=True)
         payload = g.data
-        dump_request_payload(payload, "select")
+        dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": "select_1",
             "message_ids": {

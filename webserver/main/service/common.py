@@ -3,27 +3,14 @@ import requests
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
-from main.models import get_mongo_collection
 from main.models.error import DatabaseError
-from main.repository import mongo
+from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.ack_response import get_ack_response
+from main.repository.db import add_ondc_request, get_first_ondc_request
 from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 from main.utils.webhook_utils import post_on_bg_or_bap
-
-# rabbitmq_connection, rabbitmq_channel = None, None
-#
-#
-# @retry(StreamLostError, tries=3, delay=1, jitter=(1, 3))
-# def send_message_to_queue_for_given_request(request_type, payload):
-#     global rabbitmq_connection, rabbitmq_channel
-#     rabbitmq_connection, rabbitmq_channel = open_connection_and_channel_if_not_already_open(rabbitmq_connection,
-#                                                                                             rabbitmq_channel)
-#     queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
-#     declare_queue(rabbitmq_channel, queue_name)
-#     payload['request_type'] = request_type
-#     publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
 
 
 @check_for_exception
@@ -31,9 +18,9 @@ def send_bpp_responses_to_bg_or_bpp(message):
     request_type = message['request_type']
     log(f"{request_type} payload: {message}")
     message_id = message['message_ids'][request_type]
-    mongo_collection = get_mongo_collection(request_type)
-    payload = mongo.collection_find_one(mongo_collection, {"context.message_id": message_id})
+    payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction(request_type), message_id)
     client_responses, _ = get_responses_from_client(request_type, payload)
+
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if request_type == "search" else \
         payload['context']['bap_uri']
     url_with_route = f"{gateway_or_bap_endpoint}{client_responses['context']['action']}" \
@@ -53,9 +40,11 @@ def get_responses_from_client(request_type, payload):
     return json.loads(response.text), response.status_code
 
 
-def dump_request_payload(request_payload, request_type):
-    collection_name = get_mongo_collection(request_type)
-    is_successful = mongo.collection_insert_one(collection_name, request_payload)
+def dump_request_payload(request_payload, domain):
+    message_id = request_payload['context']['message_id']
+    action = request_payload['context']['action']
+    is_successful = add_ondc_request(domain=OndcDomain(domain), action=OndcAction(action), message_id=message_id,
+                                        request=request_payload)
     if is_successful:
         return get_ack_response(ack=True)
     else:

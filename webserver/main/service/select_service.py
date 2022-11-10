@@ -1,13 +1,10 @@
-import json
-import time
-
 import pika
 
 from main import constant
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
-from main.models import get_mongo_collection
-from main.repository import mongo
+from main.models.ondc_request import OndcDomain, OndcAction
+from main.repository.db import get_first_ondc_request, get_ondc_requests
 from main.service import send_message_to_queue_for_given_request
 from main.service.common import get_responses_from_client
 from main.utils.cryptic_utils import create_authorisation_header
@@ -48,8 +45,7 @@ def send_on_select_to_bap(url_with_route, payload):
 def make_logistics_search_or_send_bpp_failure_response(message):
     log(f"select_1 payload: {message}")
     select_message_id = message['message_ids']['select']
-    select_collection = get_mongo_collection('select')
-    select_payload = mongo.collection_find_one(select_collection, {"context.message_id": select_message_id})
+    select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('select'), select_message_id)
     search_payload_or_select_response, return_code = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
         search_message_id = search_payload_or_select_response[constant.CONTEXT]['message_id']
@@ -71,12 +67,12 @@ def send_select_response_to_bap(message):
     log(f"select_2 payload: {message}")
     select_message_id = message['message_ids']['select']
     logistics_search_message_id = message['message_ids']['logistics_search']
-    select_collection = get_mongo_collection('select')
-    logistics_search_collection = get_mongo_collection('logistics_on_search')
+    select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('select'), select_message_id)
+    on_search_payloads = get_ondc_requests(OndcDomain.LOGISTICS, OndcAction('on_search'), logistics_search_message_id)
+
     payload = {
-        "select": mongo.collection_find_one(select_collection, {"context.message_id": select_message_id}),
-        "logistic_on_search": mongo.collection_find_all(logistics_search_collection,
-                                                       {"context.message_id": logistics_search_message_id})
+        "select": select_payload,
+        "logistic_on_search": on_search_payloads
     }
     select_resp, return_code = make_select_request_to_client(payload)
 
