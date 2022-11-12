@@ -2,7 +2,7 @@ import os
 
 from flask_cors import CORS
 
-from main import app
+from main.flask_app import app
 from main.models.init_database import init_database
 from main.routes import api
 

@@ -1,5 +1,4 @@
 import os
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
 from main.config import get_config_by_name
@@ -15,7 +14,9 @@ db_string = f"postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_datab
 pool_size = get_config_by_name('SQLALCHEMY_POOL_SIZE')
 
 if os.getenv('FLASK_SERVER', 'True') == 'True':
-    from main import app
+    from flask_sqlalchemy import SQLAlchemy
+    from main.flask_app import app
+
     app.debug = get_config_by_name('DEBUG')
     app.config['SQLALCHEMY_DATABASE_URI'] = db_string
     app.config['SQLALCHEMY_POOL_SIZE'] = pool_size
