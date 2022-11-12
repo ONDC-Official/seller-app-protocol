@@ -9,6 +9,7 @@ services:
     container_name: bpp-protocol-webserver
     depends_on:
       - rabbitmq
+      - postgres
     environment:
       ENV: prod
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -35,6 +36,7 @@ services:
     container_name: bpp-protocol-consumer
     depends_on:
       - rabbitmq
+      - postgres
     environment:
       ENV: prod
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -65,7 +67,7 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
 
-  postgres-db:
+  postgres:
     image: postgres
     container_name: postgres-db
     restart: always
