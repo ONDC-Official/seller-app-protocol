@@ -7,6 +7,7 @@ from main.models.error import DatabaseError
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.ack_response import get_ack_response
 from main.repository.db import add_ondc_request, get_first_ondc_request
+from main.service.utils import make_request_over_ondc_network
 from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
@@ -23,12 +24,8 @@ def send_bpp_responses_to_bg_or_bpp(message):
 
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if request_type == "search" else \
         payload['context']['bap_uri']
-    url_with_route = f"{gateway_or_bap_endpoint}{client_responses['context']['action']}" \
-        if gateway_or_bap_endpoint.endswith("/") \
-        else f"{gateway_or_bap_endpoint}/{client_responses['context']['action']}"
-
-    auth_header = create_authorisation_header(client_responses)
-    status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
+    status_code = make_request_over_ondc_network(client_responses, gateway_or_bap_endpoint,
+                                                 client_responses['context']['action'])
     # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
     #                             json=payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
