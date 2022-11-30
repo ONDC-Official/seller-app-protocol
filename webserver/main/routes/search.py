@@ -24,7 +24,7 @@ class SearchCatalogues(Resource):
         payload = g.data
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
-            "request_type": "search",
+            "request_type": f"{OndcDomain.RETAIL.value}_search",
             "message_ids": {
                 "search": payload[constant.CONTEXT]["message_id"]
             }

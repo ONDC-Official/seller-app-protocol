@@ -17,9 +17,9 @@ from main.service.common import send_bpp_responses_to_bg_or_bpp
 def consume_fn(message_string):
     payload = json.loads(message_string)
     request_type = payload.get('request_type')
-    if request_type == "search":
+    if request_type == "retail_search":
         send_bpp_responses_to_bg_or_bpp(payload)
-    elif request_type == "select_1":
+    elif request_type == "retail_select":
         make_logistics_search_or_send_bpp_failure_response(payload)
     elif request_type == "select_2":
         send_select_response_to_bap(payload)

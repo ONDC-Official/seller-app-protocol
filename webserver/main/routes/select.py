@@ -25,7 +25,7 @@ class SelectOrder(Resource):
         payload = g.data
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
-            "request_type": "select_1",
+            "request_type": f"{OndcDomain.RETAIL.value}_select",
             "message_ids": {
                 "select": payload[constant.CONTEXT]["message_id"]
             }
