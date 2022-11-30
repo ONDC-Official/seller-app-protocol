@@ -33,3 +33,24 @@ class SelectOrder(Resource):
         send_message_to_queue_for_given_request(message)
         validate(resp, response_schema)
         return resp
+
+
+@select_namespace.route("/v1/on_select")
+class OnSelectOrder(Resource):
+    path_schema = get_json_schema_for_given_path('/on_select')
+
+    @expects_json(path_schema)
+    def post(self):
+        response_schema = get_json_schema_for_response('/on_select')
+        resp = get_ack_response(ack=True)
+        payload = g.data
+        dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
+        message = {
+            "request_type": f"{OndcDomain.RETAIL.value}_on_select",
+            "message_ids": {
+                "on_select": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message)
+        validate(resp, response_schema)
+        return resp

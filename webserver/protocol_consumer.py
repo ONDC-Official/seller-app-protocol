@@ -21,7 +21,7 @@ def consume_fn(message_string):
         send_bpp_responses_to_bg_or_bpp(payload)
     elif request_type == "retail_select":
         make_logistics_search_or_send_bpp_failure_response(payload)
-    elif request_type == "select_2":
+    elif request_type == "retail_on_select":
         send_select_response_to_bap(payload)
     else:
         send_bpp_responses_to_bg_or_bpp(payload)

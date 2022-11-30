@@ -31,20 +31,13 @@ def make_logistics_search_payload_request_to_client(select_payload):
 
 @check_for_exception
 def make_logistics_search_or_send_bpp_failure_response(message):
-    log(f"select_1 payload: {message}")
+    log(f"retail select payload: {message}")
     select_message_id = message['message_ids']['select']
     select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('select'), select_message_id)
     search_payloads_or_on_select, return_code = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
         for p in search_payloads_or_on_select:
             make_logistics_search_request(p)
-        # search_message_id = search_payloads[constant.CONTEXT]['message_id']
-        # message['request_type'] = "select_2"
-        # message['message_ids']['logistics_search'] = search_message_id
-        # send_message_to_queue_for_given_request(message,
-        #                                         properties=pika.BasicProperties(headers={
-        #                                             "x-delay": get_config_by_name("LOGISTICS_ON_SEARCH_WAIT")*1000,
-        #                                         }))
     else:
         bap_endpoint = select_payload['context']['bap_uri']
         # url_with_route = f"{bap_endpoint}on_select" if bap_endpoint.endswith("/") else f"{bap_endpoint}/on_select"
@@ -55,27 +48,16 @@ def make_logistics_search_or_send_bpp_failure_response(message):
 
 @check_for_exception
 def send_select_response_to_bap(message):
-    log(f"select_2 payload: {message}")
-    select_message_id = message['message_ids']['select']
-    logistics_search_message_id = message['message_ids']['logistics_search']
-    select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('select'), select_message_id)
-    on_search_payloads = get_ondc_requests(OndcDomain.LOGISTICS, OndcAction('on_search'), logistics_search_message_id)
-
-    payload = {
-        "select": select_payload,
-        "logistic_on_search": on_search_payloads
-    }
-    select_resp, return_code = make_select_request_to_client(payload)
-
-    bap_endpoint = select_resp['context']['bap_uri']
-    # url_with_route = f"{bap_endpoint}on_select" if bap_endpoint.endswith("/") else f"{bap_endpoint}/on_select"
-    # send_on_select_to_bap(url_with_route, select_resp)
-    status_code = make_request_over_ondc_network(select_resp, bap_endpoint, 'on_select')
+    log(f"retail on_select payload: {message}")
+    on_select_message_id = message['message_ids']['on_select']
+    on_select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('on_select'), on_select_message_id)
+    bap_endpoint = on_select_payload['context']['bap_uri']
+    status_code = make_request_over_ondc_network(on_select_payload, bap_endpoint, 'on_select')
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
 if __name__ == "__main__":
-    search_payloads_or_select1, status_code = make_logistics_search_payload_request_to_client({})
+    search_payloads_or_select1, status_code1 = make_logistics_search_payload_request_to_client({})
     post_on_bg_or_bap("https://webhook.site/b8c0ef18-f162-417b-95bf-3d62352f271b/search",
                       search_payloads_or_select1)
     # search_message_id1 = search_payload_or_select_response1[constant.CONTEXT]['message_id']

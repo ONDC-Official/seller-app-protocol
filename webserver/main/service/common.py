@@ -6,12 +6,10 @@ from main.logger.custom_logging import log
 from main.models.error import DatabaseError
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.ack_response import get_ack_response
-from main.repository.db import add_ondc_request, get_first_ondc_request
+from main.repository.db import add_ondc_request, get_first_ondc_request, get_ondc_requests
 from main.service.utils import make_request_over_ondc_network
-from main.utils.cryptic_utils import create_authorisation_header
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
-from main.utils.webhook_utils import post_on_bg_or_bap
 
 
 @check_for_exception
@@ -46,3 +44,18 @@ def dump_request_payload(request_payload, domain):
         return get_ack_response(ack=True)
     else:
         return get_ack_response(ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
+
+
+def get_network_request_payloads(**kwargs):
+    response = {}
+    for k, v in kwargs.items():
+        key_parts = k.split("_", maxsplit=1)
+        domain, action = key_parts[0], key_parts[1]
+        message_ids = [x.strip() for x in v.split(",")]
+        ondc_requests = []
+        for m in message_ids:
+            ondc_requests.extend(get_ondc_requests(OndcDomain(domain), OndcAction(action), m))
+        response[k] = ondc_requests
+    return response
+
+
