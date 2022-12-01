@@ -3917,10 +3917,7 @@
           }
         },
         "required": [
-          "id",
-          "@ondc/org/fssai_license_no",
-          "ttl",
-          "descriptor"
+          "id"
         ]
       },
       "Quotation": {
