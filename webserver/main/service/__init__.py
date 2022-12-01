@@ -16,5 +16,5 @@ def send_message_to_queue_for_given_request(payload, properties=None):
                                                                                             rabbitmq_channel)
     queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
     declare_queue(rabbitmq_channel, queue_name)
-    publish_message_to_queue(rabbitmq_channel, exchange='test-x', routing_key=queue_name, body=json.dumps(payload),
+    publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload),
                              properties=properties)

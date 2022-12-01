@@ -54,9 +54,7 @@ services:
 
 
   rabbitmq:
-    build:
-      context: .
-      dockerfile: dockerfile-rabbitmq
+    image: rabbitmq:3.10-management
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
