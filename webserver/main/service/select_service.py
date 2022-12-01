@@ -26,7 +26,7 @@ def make_select_request_to_client(select_payload):
 
 
 def make_logistics_search_payload_request_to_client(select_payload):
-    return get_responses_from_client("logistics/search", select_payload)
+    return get_responses_from_client("logistics/search-payload-for-retail-select", select_payload)
 
 
 @check_for_exception
