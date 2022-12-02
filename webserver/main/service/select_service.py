@@ -1,13 +1,6 @@
-import json
-
-import pika
-
-from main import constant
-from main.config import get_config_by_name
 from main.logger.custom_logging import log
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.db import get_first_ondc_request, get_ondc_requests
-from main.service import send_message_to_queue_for_given_request
 from main.service.common import get_responses_from_client
 from main.service.utils import make_request_over_ondc_network
 from main.utils.decorators import check_for_exception
@@ -19,10 +12,6 @@ def make_logistics_search_request(payload):
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup()
     status_code = make_request_over_ondc_network(payload, gateway_or_bap_endpoint, payload['context']['action'])
     log(f"Sent request to logistics-bg with status-code {status_code}")
-
-
-def make_select_request_to_client(select_payload):
-    return get_responses_from_client("select", select_payload)
 
 
 def make_logistics_search_payload_request_to_client(select_payload):

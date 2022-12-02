@@ -34,3 +34,23 @@ class InitOrder(Resource):
         return resp
 
 
+@init_namespace.route("/v1/on_init")
+class OnSelectOrder(Resource):
+    path_schema = get_json_schema_for_given_path('/on_init')
+
+    @expects_json(path_schema)
+    def post(self):
+        response_schema = get_json_schema_for_response('/on_init')
+        resp = get_ack_response(ack=True)
+        payload = g.data
+        dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
+        message = {
+            "request_type": f"{OndcDomain.RETAIL.value}_on_init",
+            "message_ids": {
+                "on_init": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message)
+        validate(resp, response_schema)
+        return resp
+
