@@ -35,7 +35,7 @@ class InitOrder(Resource):
 
 
 @init_namespace.route("/v1/on_init")
-class OnSelectOrder(Resource):
+class OnInitOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_init')
 
     @expects_json(path_schema)

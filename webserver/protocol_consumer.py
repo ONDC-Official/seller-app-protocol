@@ -4,6 +4,8 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
+from main.service.confirm_service import make_logistics_confirm_or_send_bpp_failure_response, \
+    send_confirm_response_to_bap
 from main.service.init_service import make_logistics_init_or_send_bpp_failure_response, send_init_response_to_bap
 from main.service.select_service import make_logistics_search_or_send_bpp_failure_response, send_select_response_to_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
@@ -17,6 +19,8 @@ request_type_to_function_mapping = {
     "retail_on_select": send_select_response_to_bap,
     "retail_init": make_logistics_init_or_send_bpp_failure_response,
     "retail_on_init": send_init_response_to_bap,
+    "retail_confirm": make_logistics_confirm_or_send_bpp_failure_response,
+    "retail_on_confirm": send_confirm_response_to_bap,
 }
 
 
