@@ -1,17 +1,18 @@
+import json
+
 from main.logger.custom_logging import log
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.db import get_first_ondc_request
 from main.service.common import get_responses_from_client
 from main.service.utils import make_request_over_ondc_network
 from main.utils.decorators import check_for_exception
-from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 from main.utils.webhook_utils import post_on_bg_or_bap
 
 
 def make_logistics_init_request(payload):
-    gateway_or_bap_endpoint = fetch_gateway_url_from_lookup()
-    status_code = make_request_over_ondc_network(payload, gateway_or_bap_endpoint, payload['context']['action'])
-    log(f"Sent request to logistics-bg with status-code {status_code}")
+    bpp_endpoint = payload['context']['bpp_uri']
+    status_code = make_request_over_ondc_network(payload, bpp_endpoint, payload['context']['action'])
+    log(f"Sent request to logistics-bg/bpp with status-code {status_code}")
 
 
 def make_logistics_init_payload_request_to_client(init_payload):
@@ -26,6 +27,7 @@ def make_logistics_init_or_send_bpp_failure_response(message):
     logistics_init_payloads_or_on_init, return_code = make_logistics_init_payload_request_to_client(init_payload)
     if return_code == 200:
         for p in logistics_init_payloads_or_on_init:
+            p['context']['bap_uri'] = f"{p['context']['bap_uri']}/protocol/logistics/v1"
             make_logistics_init_request(p)
     else:
         bap_endpoint = init_payload['context']['bap_uri']

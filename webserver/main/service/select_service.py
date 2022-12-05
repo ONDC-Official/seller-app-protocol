@@ -26,6 +26,7 @@ def make_logistics_search_or_send_bpp_failure_response(message):
     search_payloads_or_on_select, return_code = make_logistics_search_payload_request_to_client(select_payload)
     if return_code == 200:
         for p in search_payloads_or_on_select:
+            p['context']['bap_uri'] = f"{p['context']['bap_uri']}/protocol/logistics/v1"
             make_logistics_search_request(p)
     else:
         bap_endpoint = select_payload['context']['bap_uri']
