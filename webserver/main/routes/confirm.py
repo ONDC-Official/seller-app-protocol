@@ -24,7 +24,7 @@ class ConfirmOrder(Resource):
         payload = g.data
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
-            "request_type": "confirm",
+            "request_type": "retail_confirm",
             "message_ids": {
                 "confirm": payload[constant.CONTEXT]["message_id"]
             }

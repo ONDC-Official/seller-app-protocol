@@ -11,7 +11,7 @@ from main.utils.schema_utils import get_json_schema_for_given_path, get_json_sch
 logistics_confirm_namespace = Namespace('logistics_confirm', description='Logistics Confirm Namespace')
 
 
-@logistics_confirm_namespace.route("/v1/on_confirm")
+@logistics_confirm_namespace.route("/logistics/v1/on_confirm")
 class OnConfirm(Resource):
     path_schema = get_json_schema_for_given_path('/on_confirm', domain="logistics")
 

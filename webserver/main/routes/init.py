@@ -24,7 +24,7 @@ class InitOrder(Resource):
         payload = g.data
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
-            "request_type": "init",
+            "request_type": "retail_init",
             "message_ids": {
                 "init": payload[constant.CONTEXT]["message_id"]
             }

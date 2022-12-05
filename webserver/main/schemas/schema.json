@@ -985,10 +985,6 @@
                           }
                         },
                         "required": [
-                          "provider.id",
-                          "provider_location.id",
-                          "items.id",
-                          "items.quantity"
                         ]
                       }
                     },

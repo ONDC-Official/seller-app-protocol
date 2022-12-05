@@ -47,6 +47,7 @@ def dump_request_payload(request_payload, domain):
 
 
 def get_network_request_payloads(**kwargs):
+    kwargs = {k: v for k, v in kwargs.items() if v is not None}
     response = {}
     for k, v in kwargs.items():
         key_parts = k.split("_", maxsplit=1)

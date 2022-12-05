@@ -11,7 +11,7 @@ from main.utils.schema_utils import get_json_schema_for_given_path, get_json_sch
 logistics_init_namespace = Namespace('logistics_init', description='Logistics Init Namespace')
 
 
-@logistics_init_namespace.route("/v1/on_init")
+@logistics_init_namespace.route("/logistics/v1/on_init")
 class OnInit(Resource):
     path_schema = get_json_schema_for_given_path('/on_init', domain="logistics")
 

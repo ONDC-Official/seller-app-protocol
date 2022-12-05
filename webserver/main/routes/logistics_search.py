@@ -11,7 +11,7 @@ from main.utils.schema_utils import get_json_schema_for_given_path, get_json_sch
 logistics_search_namespace = Namespace('logistics_search', description='Logistics Search Namespace')
 
 
-@logistics_search_namespace.route("/v1/on_search")
+@logistics_search_namespace.route("/logistics/v1/on_search")
 class SearchCatalogues(Resource):
     path_schema = get_json_schema_for_given_path('/on_search', domain="logistics")
 
