@@ -12,6 +12,8 @@ from main.routes.confirm import confirm_namespace
 from main.routes.init import init_namespace
 from main.routes.logistics_confirm import logistics_confirm_namespace
 from main.routes.logistics_init import logistics_init_namespace
+from main.routes.logistics_status import logistics_status_namespace
+from main.routes.logistics_track import logistics_track_namespace
 from main.routes.rating import rating_namespace
 from main.routes.response import response_namespace
 from main.routes.search import search_namespace
@@ -75,4 +77,6 @@ api.add_namespace(track_namespace, path='/protocol')
 api.add_namespace(logistics_search_namespace, path='/protocol')
 api.add_namespace(logistics_init_namespace, path='/protocol')
 api.add_namespace(logistics_confirm_namespace, path='/protocol')
+api.add_namespace(logistics_track_namespace, path='/protocol')
+api.add_namespace(logistics_status_namespace, path='/protocol')
 api.add_namespace(response_namespace, path='/protocol')

@@ -8,6 +8,8 @@ from main.service.confirm_service import make_logistics_confirm_or_send_bpp_fail
     send_confirm_response_to_bap
 from main.service.init_service import make_logistics_init_or_send_bpp_failure_response, send_init_response_to_bap
 from main.service.select_service import make_logistics_search_or_send_bpp_failure_response, send_select_response_to_bap
+from main.service.track_service import make_logistics_track_or_send_bpp_failure_response, send_track_response_to_bap
+from main.service.status_service import make_logistics_status_or_send_bpp_failure_response, send_status_response_to_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp
@@ -21,6 +23,10 @@ request_type_to_function_mapping = {
     "retail_on_init": send_init_response_to_bap,
     "retail_confirm": make_logistics_confirm_or_send_bpp_failure_response,
     "retail_on_confirm": send_confirm_response_to_bap,
+    "retail_track": make_logistics_track_or_send_bpp_failure_response,
+    "retail_on_track": send_track_response_to_bap,
+    "retail_status": make_logistics_status_or_send_bpp_failure_response,
+    "retail_on_status": send_status_response_to_bap,
 }
 
 
