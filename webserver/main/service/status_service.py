@@ -15,7 +15,7 @@ def make_logistics_status_request(payload):
 
 
 def make_logistics_status_payload_request_to_client(status_payload):
-    return get_responses_from_client("logistics/search-payload-for-retail-status", status_payload)
+    return get_responses_from_client("logistics/status-payload-for-retail-status", status_payload)
 
 
 @check_for_exception

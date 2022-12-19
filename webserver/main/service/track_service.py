@@ -15,7 +15,7 @@ def make_logistics_track_request(payload):
 
 
 def make_logistics_track_payload_request_to_client(track_payload):
-    return get_responses_from_client("logistics/search-payload-for-retail-track", track_payload)
+    return get_responses_from_client("logistics/track-payload-for-retail-track", track_payload)
 
 
 @check_for_exception
