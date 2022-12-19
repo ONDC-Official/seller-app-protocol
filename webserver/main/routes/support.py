@@ -24,9 +24,30 @@ class SupportOrder(Resource):
         payload = g.data
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
-            "request_type": "support",
+            "request_type": f"{OndcDomain.RETAIL.value}_support",
             "message_ids": {
                 "support": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message)
+        validate(resp, response_schema)
+        return resp
+
+
+@support_namespace.route("/v1/on_support")
+class OnSelectOrder(Resource):
+    path_schema = get_json_schema_for_given_path('/on_support')
+
+    @expects_json(path_schema)
+    def post(self):
+        response_schema = get_json_schema_for_response('/on_support')
+        resp = get_ack_response(ack=True)
+        payload = g.data
+        dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
+        message = {
+            "request_type": f"{OndcDomain.RETAIL.value}_on_support",
+            "message_ids": {
+                "on_support": payload[constant.CONTEXT]["message_id"]
             }
         }
         send_message_to_queue_for_given_request(message)
