@@ -2411,7 +2411,8 @@
               "Standard Delivery",
               "Immediate Delivery",
               "Same Day Delivery",
-              "Next Day Delivery"
+              "Next Day Delivery",
+              "Prepaid"
             ]
           },
           "parent_category_id": {
@@ -3739,6 +3740,7 @@
                   "enum": [
                     "Delivery Charge",
                     "RTO Charge",
+                    "RTO charges",
                     "Reverse QC Charge",
                     "Tax"
                   ]

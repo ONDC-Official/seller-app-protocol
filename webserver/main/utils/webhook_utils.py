@@ -25,6 +25,7 @@ def post_on_bg_or_bap(url, payload, headers={}):
     headers.update({'Content-Type': 'application/json'})
     raw_data = json.dumps(payload, separators=(',', ':'))
     response_text, status_code = requests_post(url, raw_data, headers=headers)
+    log(response_text)
     return status_code
 
 
