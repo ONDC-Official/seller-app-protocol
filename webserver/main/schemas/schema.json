@@ -3372,9 +3372,12 @@
             "type": "string",
             "enum": [
               "Created",
+              "Accepted",
               "Packed",
+              "In-progress",
+              "Completed",
               "Shipped",
-              "Out for Delivery",
+              "Out-for-delivery",
               "Delivered",
               "RTO initiated",
               "RTO delivered",
