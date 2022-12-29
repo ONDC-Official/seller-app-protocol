@@ -4,6 +4,7 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
+from main.service.cancel_service import make_logistics_cancel_or_send_bpp_failure_response, send_cancel_response_to_bap
 from main.service.confirm_service import make_logistics_confirm_or_send_bpp_failure_response, \
     send_confirm_response_to_bap
 from main.service.init_service import make_logistics_init_or_send_bpp_failure_response, send_init_response_to_bap
@@ -31,6 +32,8 @@ request_type_to_function_mapping = {
     "retail_on_status": send_status_response_to_bap,
     "retail_support": make_logistics_support_or_send_bpp_failure_response,
     "retail_on_support": send_support_response_to_bap,
+    "retail_cancel": make_logistics_cancel_or_send_bpp_failure_response,
+    "retail_on_cancel": send_cancel_response_to_bap,
 }
 
 
