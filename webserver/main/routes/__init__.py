@@ -6,24 +6,24 @@ from werkzeug.exceptions import BadRequest
 
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
-from main.routes.cancel import cancel_namespace
-from main.routes.cancellation_reasons import cancellation_reasons_namespace
-from main.routes.confirm import confirm_namespace
-from main.routes.init import init_namespace
-from main.routes.logistics_cancel import logistics_cancel_namespace
-from main.routes.logistics_confirm import logistics_confirm_namespace
-from main.routes.logistics_init import logistics_init_namespace
-from main.routes.logistics_status import logistics_status_namespace
-from main.routes.logistics_support import logistics_support_namespace
-from main.routes.logistics_track import logistics_track_namespace
-from main.routes.rating import rating_namespace
+from main.routes.retail.cancel import cancel_namespace
+from main.routes.retail.cancellation_reasons import cancellation_reasons_namespace
+from main.routes.retail.confirm import confirm_namespace
+from main.routes.retail.init import init_namespace
+from main.routes.logistics.cancel import logistics_cancel_namespace
+from main.routes.logistics.confirm import logistics_confirm_namespace
+from main.routes.logistics.init import logistics_init_namespace
+from main.routes.logistics.status import logistics_status_namespace
+from main.routes.logistics.support import logistics_support_namespace
+from main.routes.logistics.track import logistics_track_namespace
+from main.routes.retail.rating import rating_namespace
 from main.routes.response import response_namespace
-from main.routes.search import search_namespace
-from main.routes.logistics_search import logistics_search_namespace
-from main.routes.select import select_namespace
-from main.routes.status import status_namespace
-from main.routes.support import support_namespace
-from main.routes.track import track_namespace
+from main.routes.retail.search import search_namespace
+from main.routes.logistics.search import logistics_search_namespace
+from main.routes.retail.select import select_namespace
+from main.routes.retail.status import status_namespace
+from main.routes.retail.support import support_namespace
+from main.routes.retail.track import track_namespace
 from main.utils.schema_utils import transform_json_schema_error
 
 
