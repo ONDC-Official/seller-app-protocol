@@ -18,6 +18,10 @@ def make_logistics_search_payload_request_to_client(select_payload):
     return get_responses_from_client("logistics/search-payload-for-retail-select", select_payload)
 
 
+def make_retail_select_payload_request_to_client(select_payload):
+    return get_responses_from_client("client/select", select_payload)
+
+
 @check_for_exception
 def make_logistics_search_or_send_bpp_failure_response(message):
     log(f"retail select payload: {message}")
@@ -34,6 +38,24 @@ def make_logistics_search_or_send_bpp_failure_response(message):
         # send_on_select_to_bap(url_with_route, search_payload_or_select_response)
         status_code = make_request_over_ondc_network(search_payloads_or_on_select, bap_endpoint, 'on_select')
         log(f"Sent responses to bg/bap with status-code {status_code}")
+
+
+@check_for_exception
+def send_select_payload_to_client(message):
+    log(f"retail select payload: {message}")
+    select_message_id = message['message_ids']['select']
+    select_payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction('select'), select_message_id)
+    resp, return_code = make_retail_select_payload_request_to_client(select_payload)
+    log(f"Got response {resp} from client with status-code {return_code}")
+
+
+@check_for_exception
+def make_logistics_search(message):
+    log(f"logistics search payload: {message}")
+    search_message_id = message['message_ids']['search']
+    search_payload = get_first_ondc_request(OndcDomain.LOGISTICS, OndcAction('search'), search_message_id)
+    search_payload['context']['bap_uri'] = f"{search_payload['context']['bap_uri']}/protocol/logistics/v1"
+    make_logistics_search_request(search_payload)
 
 
 @check_for_exception

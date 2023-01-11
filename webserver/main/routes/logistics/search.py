@@ -11,8 +11,22 @@ from main.utils.schema_utils import get_json_schema_for_given_path, get_json_sch
 logistics_search_namespace = Namespace('logistics_search', description='Logistics Search Namespace')
 
 
+@logistics_search_namespace.route("/logistics/v1/search")
+class Search(Resource):
+    path_schema = get_json_schema_for_given_path('/search', domain="logistics")
+
+    @expects_json(path_schema)
+    def post(self):
+        response_schema = get_json_schema_for_response('/search', domain="logistics")
+        resp = get_ack_response(ack=True)
+        payload = request.get_json()
+        dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value)
+        validate(resp, response_schema)
+        return resp
+
+
 @logistics_search_namespace.route("/logistics/v1/on_search")
-class SearchCatalogues(Resource):
+class OnSearch(Resource):
     path_schema = get_json_schema_for_given_path('/on_search', domain="logistics")
 
     @expects_json(path_schema)
