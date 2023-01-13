@@ -4,15 +4,18 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
-from main.service.cancel_service import make_logistics_cancel_or_send_bpp_failure_response, send_cancel_response_to_bap
-from main.service.confirm_service import make_logistics_confirm_or_send_bpp_failure_response, \
+from main.service.cancel_service import send_cancel_payload_to_client, make_logistics_cancel, \
+    send_cancel_response_to_bap
+from main.service.confirm_service import send_confirm_payload_to_client, make_logistics_confirm, \
     send_confirm_response_to_bap
-from main.service.init_service import make_logistics_init_or_send_bpp_failure_response, send_init_response_to_bap
-from main.service.select_service import send_select_payload_to_client, make_logistics_search, send_select_response_to_bap
-from main.service.support_service import make_logistics_support_or_send_bpp_failure_response, \
+from main.service.init_service import send_init_payload_to_client, make_logistics_init, send_init_response_to_bap
+from main.service.select_service import send_select_payload_to_client, make_logistics_search, \
+    send_select_response_to_bap
+from main.service.support_service import send_support_payload_to_client, make_logistics_support, \
     send_support_response_to_bap
-from main.service.track_service import make_logistics_track_or_send_bpp_failure_response, send_track_response_to_bap
-from main.service.status_service import make_logistics_status_or_send_bpp_failure_response, send_status_response_to_bap
+from main.service.track_service import send_track_payload_to_client, make_logistics_track, send_track_response_to_bap
+from main.service.status_service import send_status_payload_to_client, make_logistics_status, \
+    send_status_response_to_bap
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp
@@ -21,20 +24,27 @@ from main.service.common import send_bpp_responses_to_bg_or_bpp
 request_type_to_function_mapping = {
     "retail_search": send_bpp_responses_to_bg_or_bpp,
     "retail_select": send_select_payload_to_client,
-    "logistics_search": make_logistics_search,
     "retail_on_select": send_select_response_to_bap,
-    "retail_init": make_logistics_init_or_send_bpp_failure_response,
+    "retail_init": send_track_payload_to_client,
     "retail_on_init": send_init_response_to_bap,
-    "retail_confirm": make_logistics_confirm_or_send_bpp_failure_response,
+    "retail_confirm": send_confirm_payload_to_client,
     "retail_on_confirm": send_confirm_response_to_bap,
-    "retail_track": make_logistics_track_or_send_bpp_failure_response,
+    "retail_track": send_track_payload_to_client,
     "retail_on_track": send_track_response_to_bap,
-    "retail_status": make_logistics_status_or_send_bpp_failure_response,
+    "retail_status": send_status_payload_to_client,
     "retail_on_status": send_status_response_to_bap,
-    "retail_support": make_logistics_support_or_send_bpp_failure_response,
+    "retail_support": send_support_payload_to_client,
     "retail_on_support": send_support_response_to_bap,
-    "retail_cancel": make_logistics_cancel_or_send_bpp_failure_response,
+    "retail_cancel": send_cancel_payload_to_client,
     "retail_on_cancel": send_cancel_response_to_bap,
+
+    "logistics_search": make_logistics_search,
+    "logistics_init": make_logistics_init,
+    "logistics_confirm": make_logistics_confirm,
+    "logistics_track": make_logistics_track,
+    "logistics_status": make_logistics_status,
+    "logistics_support": make_logistics_support,
+    "logistics_cancel": make_logistics_cancel,
 }
 
 
