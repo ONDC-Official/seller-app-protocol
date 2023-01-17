@@ -9,6 +9,7 @@ from main.service.cancel_service import send_cancel_payload_to_client, make_logi
 from main.service.confirm_service import send_confirm_payload_to_client, make_logistics_confirm, \
     send_confirm_response_to_bap
 from main.service.init_service import send_init_payload_to_client, make_logistics_init, send_init_response_to_bap
+from main.service.search_service import send_search_response_to_gateway, send_search_payload_to_client
 from main.service.select_service import send_select_payload_to_client, make_logistics_search, \
     send_select_response_to_bap
 from main.service.support_service import send_support_payload_to_client, make_logistics_support, \
@@ -22,10 +23,11 @@ from main.service.common import send_bpp_responses_to_bg_or_bpp
 
 
 request_type_to_function_mapping = {
-    "retail_search": send_bpp_responses_to_bg_or_bpp,
+    "retail_search": send_search_payload_to_client,
+    "retail_on_search": send_search_response_to_gateway,
     "retail_select": send_select_payload_to_client,
     "retail_on_select": send_select_response_to_bap,
-    "retail_init": send_track_payload_to_client,
+    "retail_init": send_init_payload_to_client,
     "retail_on_init": send_init_response_to_bap,
     "retail_confirm": send_confirm_payload_to_client,
     "retail_on_confirm": send_confirm_response_to_bap,
