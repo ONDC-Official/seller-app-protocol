@@ -35,9 +35,9 @@ def get_responses_from_client(request_type, payload):
     return json.loads(response.text), response.status_code
 
 
-def dump_request_payload(request_payload, domain):
+def dump_request_payload(request_payload, domain, action=None):
     message_id = request_payload['context']['message_id']
-    action = request_payload['context']['action']
+    action = action if action else request_payload['context']['action']
     is_successful = add_ondc_request(domain=OndcDomain(domain), action=OndcAction(action), message_id=message_id,
                                         request=request_payload)
     if is_successful:

@@ -43,7 +43,7 @@ class OnSearch(Resource):
         response_schema = get_json_schema_for_response('/on_search', domain="logistics")
         resp = get_ack_response(ack=True)
         payload = request.get_json()
-        dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value)
+        dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value, action="on_search")
         validate(resp, response_schema)
         return resp
 
