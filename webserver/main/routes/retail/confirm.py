@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, request
 from flask_expects_json import expects_json
 from flask_restx import Namespace, Resource, reqparse
 from jsonschema import validate
@@ -21,7 +21,7 @@ class ConfirmOrder(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/confirm')
         resp = get_ack_response(ack=True)
-        payload = g.data
+        payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": "retail_confirm",
@@ -42,7 +42,7 @@ class OnConfirmOrder(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/on_confirm')
         resp = get_ack_response(ack=True)
-        payload = g.data
+        payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": f"{OndcDomain.RETAIL.value}_on_confirm",

@@ -22,7 +22,7 @@ class SelectOrder(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/select')
         resp = get_ack_response(ack=True)
-        payload = g.data
+        payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": f"{OndcDomain.RETAIL.value}_select",
@@ -43,7 +43,7 @@ class OnSelectOrder(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/on_select')
         resp = get_ack_response(ack=True)
-        payload = g.data
+        payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": f"{OndcDomain.RETAIL.value}_on_select",

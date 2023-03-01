@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, request
 from flask_expects_json import expects_json
 from flask_restx import Namespace, Resource, reqparse
 from jsonschema import validate
@@ -21,7 +21,7 @@ class CancellationReasons(Resource):
     def post(self):
         response_schema = get_json_schema_for_response('/cancellation_reasons')
         resp = get_ack_response(ack=True)
-        payload = g.data
+        payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
         message = {
             "request_type": "cancellation_reasons",
