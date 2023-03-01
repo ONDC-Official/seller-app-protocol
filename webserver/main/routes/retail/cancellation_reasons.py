@@ -17,7 +17,7 @@ cancellation_reasons_namespace = Namespace('cancellation_reasons', description='
 class CancellationReasons(Resource):
     path_schema = get_json_schema_for_given_path('/cancellation_reasons')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/cancellation_reasons')
         resp = get_ack_response(ack=True)

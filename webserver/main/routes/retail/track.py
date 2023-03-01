@@ -17,7 +17,7 @@ track_namespace = Namespace('track', description='Track Namespace')
 class TrackOrder(Resource):
     path_schema = get_json_schema_for_given_path('/track')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/track')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class TrackOrder(Resource):
 class OnSelectOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_track')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_track')
         resp = get_ack_response(ack=True)

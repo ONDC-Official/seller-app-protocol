@@ -17,7 +17,7 @@ init_namespace = Namespace('init', description='Init Namespace')
 class InitOrder(Resource):
     path_schema = get_json_schema_for_given_path('/init')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/init')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class InitOrder(Resource):
 class OnInitOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_init')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_init')
         resp = get_ack_response(ack=True)

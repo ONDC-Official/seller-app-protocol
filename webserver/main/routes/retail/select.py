@@ -18,7 +18,7 @@ select_namespace = Namespace('select', description='Select Namespace')
 class SelectOrder(Resource):
     path_schema = get_json_schema_for_given_path('/select')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/select')
         resp = get_ack_response(ack=True)
@@ -39,7 +39,7 @@ class SelectOrder(Resource):
 class OnSelectOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_select')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_select')
         resp = get_ack_response(ack=True)

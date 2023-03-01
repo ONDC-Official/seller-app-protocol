@@ -17,7 +17,7 @@ confirm_namespace = Namespace('confirm', description='Confirm Namespace')
 class ConfirmOrder(Resource):
     path_schema = get_json_schema_for_given_path('/confirm')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/confirm')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class ConfirmOrder(Resource):
 class OnConfirmOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_confirm')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_confirm')
         resp = get_ack_response(ack=True)

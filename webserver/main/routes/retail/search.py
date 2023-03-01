@@ -17,7 +17,7 @@ search_namespace = Namespace('search', description='Search Namespace')
 class SearchCatalogues(Resource):
     path_schema = get_json_schema_for_given_path('/search')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/search')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class SearchCatalogues(Resource):
 class OnSearch(Resource):
     path_schema = get_json_schema_for_given_path('/on_search')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_search')
         resp = get_ack_response(ack=True)

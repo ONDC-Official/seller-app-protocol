@@ -17,7 +17,7 @@ status_namespace = Namespace('status', description='Status Namespace')
 class StatusOrder(Resource):
     path_schema = get_json_schema_for_given_path('/status')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/status')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class StatusOrder(Resource):
 class OnSelectOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_status')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_status')
         resp = get_ack_response(ack=True)

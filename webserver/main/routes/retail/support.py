@@ -17,7 +17,7 @@ support_namespace = Namespace('support', description='Support Namespace')
 class SupportOrder(Resource):
     path_schema = get_json_schema_for_given_path('/support')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/support')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class SupportOrder(Resource):
 class OnSelectOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_support')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_support')
         resp = get_ack_response(ack=True)

@@ -17,7 +17,7 @@ cancel_namespace = Namespace('cancel', description='Cancel Namespace')
 class CancelOrder(Resource):
     path_schema = get_json_schema_for_given_path('/cancel')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/cancel')
         resp = get_ack_response(ack=True)
@@ -38,7 +38,7 @@ class CancelOrder(Resource):
 class OnCancelOrder(Resource):
     path_schema = get_json_schema_for_given_path('/on_cancel')
 
-    @expects_json(path_schema)
+    # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/on_cancel')
         resp = get_ack_response(ack=True)
