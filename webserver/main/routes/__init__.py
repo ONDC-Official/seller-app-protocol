@@ -6,6 +6,7 @@ from werkzeug.exceptions import BadRequest
 
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
+from main.routes.logistics.update import logistics_update_namespace
 from main.routes.retail.cancel import cancel_namespace
 from main.routes.retail.cancellation_reasons import cancellation_reasons_namespace
 from main.routes.retail.confirm import confirm_namespace
@@ -24,6 +25,7 @@ from main.routes.retail.select import select_namespace
 from main.routes.retail.status import status_namespace
 from main.routes.retail.support import support_namespace
 from main.routes.retail.track import track_namespace
+from main.routes.retail.update import update_namespace
 from main.utils.schema_utils import transform_json_schema_error
 
 
@@ -76,6 +78,7 @@ api.add_namespace(select_namespace, path='/protocol')
 api.add_namespace(status_namespace, path='/protocol')
 api.add_namespace(support_namespace, path='/protocol')
 api.add_namespace(track_namespace, path='/protocol')
+api.add_namespace(update_namespace, path='/protocol')
 api.add_namespace(logistics_search_namespace, path='/protocol')
 api.add_namespace(logistics_init_namespace, path='/protocol')
 api.add_namespace(logistics_confirm_namespace, path='/protocol')
@@ -83,4 +86,5 @@ api.add_namespace(logistics_track_namespace, path='/protocol')
 api.add_namespace(logistics_status_namespace, path='/protocol')
 api.add_namespace(logistics_support_namespace, path='/protocol')
 api.add_namespace(logistics_cancel_namespace, path='/protocol')
+api.add_namespace(logistics_update_namespace, path='/protocol')
 api.add_namespace(response_namespace, path='/protocol')
