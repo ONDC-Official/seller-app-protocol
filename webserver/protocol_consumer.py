@@ -20,8 +20,7 @@ from main.service.status_service import send_status_payload_to_client, make_logi
 from main.service.update_service import send_update_response_to_bap, make_logistics_update
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
-from main.service.common import send_bpp_responses_to_bg_or_bpp
-
+from main.service.common import send_bpp_responses_to_bg_or_bpp, send_logistics_on_call_count_to_client
 
 request_type_to_function_mapping = {
     "retail_search": send_search_payload_to_client,
@@ -50,6 +49,15 @@ request_type_to_function_mapping = {
     "logistics_support": make_logistics_support,
     "logistics_cancel": make_logistics_cancel,
     "logistics_update": make_logistics_update,
+
+    "logistics_on_search": lambda m: send_logistics_on_call_count_to_client(m, "on_search"),
+    "logistics_on_init": lambda m: send_logistics_on_call_count_to_client(m, "on_init"),
+    "logistics_on_confirm": lambda m: send_logistics_on_call_count_to_client(m, "on_confirm"),
+    "logistics_on_track": lambda m: send_logistics_on_call_count_to_client(m, "on_track"),
+    "logistics_on_status": lambda m: send_logistics_on_call_count_to_client(m, "on_status"),
+    "logistics_on_support": lambda m: send_logistics_on_call_count_to_client(m, "on_support"),
+    "logistics_on_cancel": lambda m: send_logistics_on_call_count_to_client(m, "on_cancel"),
+    "logistics_on_update": lambda m: send_logistics_on_call_count_to_client(m, "on_update"),
 }
 
 

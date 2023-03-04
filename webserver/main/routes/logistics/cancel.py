@@ -44,6 +44,13 @@ class OnCancel(Resource):
         resp = get_ack_response(ack=True)
         payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value)
+        message = {
+            "request_type": f"{OndcDomain.LOGISTICS.value}_on_cancel",
+            "message_ids": {
+                "on_cancel": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message)
         validate(resp, response_schema)
         return resp
 

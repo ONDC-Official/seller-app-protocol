@@ -44,6 +44,13 @@ class OnSearch(Resource):
         resp = get_ack_response(ack=True)
         payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.LOGISTICS.value, action="on_search")
+        message = {
+            "request_type": f"{OndcDomain.LOGISTICS.value}_on_search",
+            "message_ids": {
+                "on_search": payload[constant.CONTEXT]["message_id"]
+            }
+        }
+        send_message_to_queue_for_given_request(message)
         validate(resp, response_schema)
         return resp
 
