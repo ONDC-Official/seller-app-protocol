@@ -2793,7 +2793,7 @@
             ]
           },
           "@ondc/org/awb_no": {
-            "type": ["string","null"]
+            "type": "string"
           },
           "@ondc/org/ewaybillno": {
             "type": "string"
@@ -3302,7 +3302,8 @@
             "$ref": "#/components/schemas/Payment"
           },
           "created_at": {
-            "type": ["string","null"]
+            "type": "string",
+            "format": "date-time"
           },
           "updated_at": {
             "type": "string",
