@@ -2827,9 +2827,6 @@
               }
             }
           },
-          "agent": {
-            "$ref": "#/components/schemas/Agent"
-          },
           "person": {
             "$ref": "#/components/schemas/Person"
           },
