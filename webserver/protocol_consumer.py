@@ -17,7 +17,8 @@ from main.service.support_service import send_support_payload_to_client, make_lo
 from main.service.track_service import send_track_payload_to_client, make_logistics_track, send_track_response_to_bap
 from main.service.status_service import send_status_payload_to_client, make_logistics_status, \
     send_status_response_to_bap
-from main.service.update_service import send_update_response_to_bap, make_logistics_update
+from main.service.update_service import send_update_response_to_bap, make_logistics_update, \
+    send_update_payload_to_client
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp, send_logistics_on_call_count_to_client
@@ -39,6 +40,7 @@ request_type_to_function_mapping = {
     "retail_on_support": send_support_response_to_bap,
     "retail_cancel": send_cancel_payload_to_client,
     "retail_on_cancel": send_cancel_response_to_bap,
+    "retail_update": send_update_payload_to_client,
     "retail_on_update": send_update_response_to_bap,
 
     "logistics_search": make_logistics_search,
