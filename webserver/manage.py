@@ -1,8 +1,19 @@
 import os
 
-from main import create_app
+from flask_cors import CORS
 
-app = create_app(os.getenv("ENV") or "dev")
+from main.flask_app import app
+from main.models.init_database import init_database
+from main.routes import api
+
+
+def create_tables():
+    init_database(False)
+
+
+api.init_app(app)
+CORS(app)
+create_tables()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,8 @@
 import functools
+import json
 import threading
+import time
+
 import pika
 
 
@@ -35,13 +38,15 @@ def create_channel(connection):
 
 
 def declare_queue(channel, queue_name):
+    # channel.exchange_declare("test-x", exchange_type="x-delayed-message", arguments={"x-delayed-type": "direct"})
     channel.queue_declare(queue=queue_name)
+    # channel.queue_bind(queue=queue_name, exchange="test-x", routing_key=queue_name)
 
 
 # @retry(3, errors=StreamLostError)
-def publish_message_to_queue(channel, exchange, routing_key, body):
+def publish_message_to_queue(channel, exchange, routing_key, body, properties=None):
     log(f"Publishing message of {body}")
-    channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body)
+    channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body, properties=properties)
 
 
 def consume_message(connection, channel, queue_name, consume_fn):

@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "ONDC Protocol API for retail (grocery, f&b)",
-    "description": "ONDC Protocol API specification, which includes statutory requirements for packaged commodities and pre-packaged food This is an adaptation of Beckn Core version 0.9.3",
+    "title": "ONDC Protocol API for logistics",
+    "description": "ONDC Protocol Core API specification. This is an adaptation of Beckn Core version 0.9.3",
     "version": "1.0.19"
   },
   "security": [
@@ -17,8 +17,8 @@
     }
   ],
   "externalDocs": {
-    "description": "Contract between retail buyer and seller apps (change tracking here, details in spec)",
-    "url": "https://docs.google.com/document/d/12oMC4A05jT5rjCbY-M7j4T2oekr9bqcvSOpTI0jFEgE/edit"
+    "description": "Contract between logistics buyer and seller apps",
+    "url": "https://docs.google.com/document/d/1LiKGK3AKwzx5GWAc5g942QKB-TzDn0gGMsvXNJgIrmk/edit"
   },
   "paths": {
     "/search": {
@@ -983,9 +983,7 @@
                           "payment": {
                             "$ref": "#/components/schemas/Payment"
                           }
-                        },
-                        "required": [
-                        ]
+                        }
                       }
                     },
                     "required": [
@@ -2353,14 +2351,7 @@
         "type": "object",
         "properties": {
           "bpp/descriptor": {
-            "$ref": "#/components/schemas/Descriptor",
-            "required": [
-              "name",
-              "symbol",
-              "short_desc",
-              "long_desc",
-              "images"
-            ]
+            "$ref": "#/components/schemas/Descriptor"
           },
           "bpp/categories": {
             "type": "array",
@@ -2392,14 +2383,9 @@
               "$ref": "#/components/schemas/Provider"
             },
             "required": [
-              "Provider.fulfillments.id",
-              "Provider.fulfillments.type",
-              "Provider.locations.id",
-              "Provider.locations.gps",
-              "Provider.locations.address.street",
-              "Provider.locations.address.city",
-              "Provider.locations.address.area_code",
-              "Provider.locations.address.state"
+              "descriptor.name",
+              "locations.gps",
+              "items.descriptor.name"
             ]
           },
           "exp": {
@@ -2409,34 +2395,27 @@
           }
         },
         "required": [
-          "bpp/descriptor",
           "bpp/providers"
         ]
       },
       "Category": {
-        "description": "Describes a category",
+        "description": "Describes a category.",
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
             "description": "Unique id of the category",
             "enum": [
-              "Grocery",
-              "Packaged Commodities",
-              "Packaged Foods",
-              "Fruits and Vegetables",
-              "F&B",
-              "Fashion"
+              "Express Delivery",
+              "Standard Delivery",
+              "Immediate Delivery",
+              "Same Day Delivery",
+              "Next Day Delivery"
             ]
           },
           "parent_category_id": {
             "type": "string",
-            "description": "Unique id of the parent category",
-            "enum": [
-              "Grocery",
-              "F&B",
-              "Fashion"
-            ]
+            "description": "Unique id of the parent category - Express delivery - Standard Delivery"
           },
           "descriptor": {
             "$ref": "#/components/schemas/Descriptor"
@@ -2605,7 +2584,7 @@
       },
       "DecimalValue": {
         "description": "Describes a decimal value",
-        "type": ["string", "number"],
+        "type": "string",
         "pattern": "[+-]?([0-9]*[.])?[0-9]+"
       },
       "Descriptor": {
@@ -2675,7 +2654,7 @@
         "description": "Codification of domain for ONDC",
         "type": "string",
         "enum": [
-          "nic2004:52110"
+          "nic2004:60232"
         ]
       },
       "Duration": {
@@ -2796,7 +2775,7 @@
         }
       },
       "Fulfillment": {
-        "description": "Describes how a single product/service will be rendered/fulfilled to the end customer - State can have following values - \"Serviceable\", \"Non-serviceable\", \"Agent reached pickup\", \"Agent picked up order\", \"Agent reached drop location\", \"Agent delivered the order\", \"Order is cancelled\"",
+        "description": "Describes how a single product/service will be rendered/fulfilled to the end customer - Use tags to communicate if order is ready to ship - Order ready to ship - \"@ondc/org/order_ready_to_ship\" (pass \"Yes\")",
         "type": "object",
         "properties": {
           "id": {
@@ -2805,27 +2784,26 @@
           },
           "type": {
             "type": "string",
-            "description": "This describes the type of fulfillment (\"Pickup\" - Buyer picks up from store by themselves or through their logistics provider; \"Delivery\" - seller delivers to buyer)",
+            "description": "This describes the type of fulfillment",
             "enum": [
-              "Delivery",
-              "Pickup",
-              "Delivery and Pickup",
+              "CoD",
+              "Prepaid",
+              "RTO",
               "Reverse QC"
             ]
           },
-          "@ondc/org/category": {
-            "type": "string",
-            "description": "Fulfillment Category"
+          "@ondc/org/awb_no": {
+            "type": ["string","null"]
           },
-          "@ondc/org/TAT": {
-            "description": "fulfillment turnaround time in ISO8601 durations format e.g. 'PT24H' indicates 24 hour TAT",
+          "@ondc/org/ewaybillno": {
             "type": "string"
+          },
+          "@ondc/org/ebnexpirydate": {
+            "type": "string",
+            "format": "date-time"
           },
           "provider_id": {
             "$ref": "#/components/schemas/Provider/properties/id"
-          },
-          "@ondc/org/provider_name": {
-            "type": "string"
           },
           "rating": {
             "$ref": "#/components/schemas/Rating/properties/value"
@@ -2848,9 +2826,6 @@
                 "$ref": "#/components/schemas/Contact"
               }
             }
-          },
-          "agent": {
-            "$ref": "#/components/schemas/Agent"
           },
           "person": {
             "$ref": "#/components/schemas/Person"
@@ -2915,9 +2890,7 @@
           "tags": {
             "$ref": "#/components/schemas/Tags"
           }
-        },
-        "required": [
-        ]
+        }
       },
       "Gps": {
         "description": "Describes a gps coordinate",
@@ -2929,7 +2902,7 @@
         "type": "string"
       },
       "Intent": {
-        "description": "Intent of a user. Used for searching for services. Buyer App can set finder fee type in payment.\"@ondc/org/buyer_app_finder_fee_type\" and amount in \"@ondc/org/buyer_app_finder_fee_amount\"",
+        "description": "Intent of a user. Used for searching for services",
         "type": "object",
         "properties": {
           "descriptor": {
@@ -2952,6 +2925,27 @@
           },
           "item": {
             "$ref": "#/components/schemas/Item"
+          },
+          "@ondc/org/payload_details": {
+            "type": "object",
+            "description": "payload details that will allow logistics provider to determine serviceability. For weight, enums for unit are - \"Kilogram\", \"Gram\" For dimensions, enums for length.unit, breadth.unit and height.unit are - \"meter\", \"centimeter\"",
+            "properties": {
+              "weight": {
+                "$ref": "#/components/schemas/Scalar"
+              },
+              "dimensions": {
+                "$ref": "#/components/schemas/Dimensions"
+              },
+              "category": {
+                "type": "string"
+              },
+              "value": {
+                "$ref": "#/components/schemas/Price"
+              },
+              "dangerous_goods": {
+                "type": "boolean"
+              }
+            }
           },
           "tags": {
             "$ref": "#/components/schemas/Tags"
@@ -3025,7 +3019,7 @@
         }
       },
       "Item": {
-        "description": "Describes a product or a service offered to the end consumer by the provider - Statutory requirements for category_id \"Packaged Commodities\" - descriptor.name (for item name), price.value (for declared price), price.maximum_value (for MRP); Statutory requirements for category_id \"Packaged Foods\" - descriptor.name (for item name), descriptor.symbol (for veg or non-veg), descriptor.short_desc (for food allergen), descriptor.long_desc (for instructions for use), price.value (for declared price); All other statutory attributes must be provided, as applicable, for the above; No statutory requirement for category_id \"F&B\" or \"Fruits and Vegetables\"",
+        "description": "Describes a product or a service offered to the end consumer by the provider.",
         "type": "object",
         "properties": {
           "id": {
@@ -3036,22 +3030,10 @@
             "$ref": "#/components/schemas/Item/properties/id"
           },
           "descriptor": {
-            "$ref": "#/components/schemas/Descriptor",
-            "required": [
-              "name",
-              "symbol",
-              "short_desc",
-              "long_desc",
-              "images"
-            ]
+            "$ref": "#/components/schemas/Descriptor"
           },
           "price": {
-            "$ref": "#/components/schemas/Price",
-            "required": [
-              "value",
-              "maximum_value",
-              "currency"
-            ]
+            "$ref": "#/components/schemas/Price"
           },
           "category_id": {
             "$ref": "#/components/schemas/Category/properties/id"
@@ -3080,162 +3062,14 @@
           "recommended": {
             "type": "boolean"
           },
-          "@ondc/org/returnable": {
-            "description": "whether the item is returnable",
-            "type": "boolean"
-          },
-          "@ondc/org/seller_pickup_return": {
-            "description": "in case of return, whether the item should be picked up by seller",
-            "type": "boolean"
-          },
-          "@ondc/org/return_window": {
-            "description": "return window for the item in ISO8601 durations format e.g. 'PT24H' indicates 24 hour return window. Mandatory if \"@ondc/org/returnable\" is \"true\"",
-            "type": "string"
-          },
-          "@ondc/org/cancellable": {
-            "description": "whether the item is cancellable",
-            "type": "boolean"
-          },
-          "@ondc/org/time_to_ship": {
-            "description": "time from order confirmation by which item ready to ship in ISO8601 durations format (e.g. 'PT30M' indicates item ready to ship in 30 mins). Mandatory for category_id \"F&B\"",
-            "type": "string"
-          },
-          "@ondc/org/available_on_cod": {
-            "description": "whether the catalog item is available on COD",
-            "type": "boolean"
-          },
-          "@ondc/org/contact_details_consumer_care": {
-            "description": "contact details for consumer care",
-            "type": "string"
-          },
-          "@ondc/org/statutory_reqs_packaged_commodities": {
-            "type": "object",
-            "description": "mandatory for category_id \"Packaged Commodities\" - required attributes for all include the following - manufacturer_or_packer_name, manufacturer_or_packer_address, common_or_generic_name_of_commodity, net_quantity_or_measure_of_commodity_in_pkg, month_year_of_manufacture_packing_import; other attributes are required on case-by-case basis",
-            "properties": {
-              "manufacturer_or_packer_name": {
-                "description": "name of manufacturer or packer (in case manufacturer is not the packer) or name of importer for imported goods",
-                "type": "string"
-              },
-              "manufacturer_or_packer_address": {
-                "description": "address of manufacturer or packer (in case manufacturer is not the packer) or address of importer for imported goods",
-                "type": "string"
-              },
-              "common_or_generic_name_of_commodity": {
-                "description": "common or generic name of commodity",
-                "type": "string"
-              },
-              "multiple_products_name_number_or_qty": {
-                "description": "for packages with multiple products, the name and number of quantity of each (can be shown as \"name1-number_or_quantity; name2-number_or_quantity..\")",
-                "type": "string"
-              },
-              "net_quantity_or_measure_of_commodity_in_pkg": {
-                "description": "net quantity of commodity in terms of standard unit of weight or measure of commodity contained in package",
-                "type": "string"
-              },
-              "month_year_of_manufacture_packing_import": {
-                "description": "month and year of manufacture or packing or import",
-                "type": "string"
-              },
-              "imported_product_country_of_origin": {
-                "description": "country of origin for imported products (ISO 3166 Alpha-3 code format)",
-                "type": "string"
-              }
-            }
-          },
-          "@ondc/org/statutory_reqs_prepackaged_food": {
-            "type": "object",
-            "description": "mandatory for category_id \"Packaged food\" - required attributes include the following - nutritional_info, additives_info, net_quantity; other attributes are required on case-by-case basis",
-            "properties": {
-              "ingredients_info": {
-                "description": "list of ingredients (except single ingredient foods), can be shown as ingredient (with percentage); ingredient (with percentage);..) e.g. \"Puffed Rice (40%); Split Green Gram (20%); Ground Nuts (20%);..\"",
-                "type": "string"
-              },
-              "nutritional_info": {
-                "description": "nutritional info (can be shown as nutritional info (with unit, per standard unit, per serving);..) e.g. \"Energy(KCal) - (per 100kg) 420, (per serving 50g) 250; Protein(g) - (per 100kg) 12, (per serving 50g)6;..\"",
-                "type": "string"
-              },
-              "additives_info": {
-                "description": "food additives together with specific name or recognized International Numbering System (can be shown as additive1-name or number;additive2-name or number;..)",
-                "type": "string"
-              },
-              "manufacturer_or_packer_name": {
-                "description": "name of manufacturer or packer (for non-retail containers)",
-                "type": "string"
-              },
-              "manufacturer_or_packer_address": {
-                "description": "address of manufacturer or packer (for non-retail containers)",
-                "type": "string"
-              },
-              "brand_owner_name": {
-                "description": "name of brand owner",
-                "type": "string"
-              },
-              "brand_owner_address": {
-                "description": "address of brand owner",
-                "type": "string"
-              },
-              "brand_owner_FSSAI_logo": {
-                "description": "FSSAI logo of brand owner (url based image e.g. uri:http://path/to/image)",
-                "type": "string"
-              },
-              "brand_owner_FSSAI_license_no": {
-                "description": "FSSAI license no of brand owner",
-                "type": "string"
-              },
-              "other_FSSAI_license_no": {
-                "description": "FSSAI license no of manufacturer or marketer or packer or bottler if different from brand owner",
-                "type": "string"
-              },
-              "net_quantity": {
-                "description": "net quantity",
-                "type": "string"
-              },
-              "importer_name": {
-                "description": "name of importer",
-                "type": "string"
-              },
-              "importer_address": {
-                "description": "address of importer",
-                "type": "string"
-              },
-              "importer_FSSAI_logo": {
-                "description": "FSSAI logo of importer (url based image e.g. uri:http://path/to/image)",
-                "type": "string"
-              },
-              "importer_FSSAI_license_no": {
-                "description": "FSSAI license no of importer",
-                "type": "string"
-              },
-              "imported_product_country_of_origin": {
-                "description": "country of origin for imported products (ISO 3166 Alpha-3 code format)",
-                "type": "string"
-              },
-              "other_importer_name": {
-                "description": "name of importer for product manufactured outside but packaged or bottled in India",
-                "type": "string"
-              },
-              "other_importer_address": {
-                "description": "address of importer for product manufactured outside but packaged or bottled in India",
-                "type": "string"
-              },
-              "other_premises": {
-                "description": "premises where product manufactured outside are packaged or bottled in India",
-                "type": "string"
-              },
-              "other_importer_country_of_origin": {
-                "description": "country of origin for product manufactured outside but packaged or bottled in India (ISO 3166 Alpha-3 code format)",
-                "type": "string"
-              }
-            }
-          },
-          "@ondc/org/mandatory_reqs_veggies_fruits": {
-            "type": "object",
-            "description": "mandatory for category_id \"Fruits and Vegetables\" required attributes include the following - net_quantity"
-          },
           "tags": {
             "$ref": "#/components/schemas/Tags"
           }
-        }
+        },
+        "required": [
+          "id",
+          "category_id"
+        ]
       },
       "Language": {
         "description": "indicates language code. ONDC supports language codes as per ISO 639.2 standard",
@@ -3287,7 +3121,7 @@
       },
       "Name": {
         "type": "string",
-        "description": "Describes the name of a person in format: ./{given_name}/{honorific_prefix}/{first_name}/{middle_name}/{last_name}/{honorific_suffix}"
+        "description": "Describes the name of a person"
       },
       "Offer": {
         "description": "Describes an offer",
@@ -3361,28 +3195,15 @@
         }
       },
       "Order": {
-        "description": "Describes the details of an order - For \"@ondc/org/cancellation.cancelled_by\" use following values - buyer-app, seller-app, logistics-provider;",
+        "description": "Describes the details of an order - For \"@ondc/org/cancellation.cancelled_by\" use following values - buyer-app, seller-app, logistics-provider",
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier for Order across the network, Will be created by buyer app in confirm API"
+            "description": "Unique identifier for Order across network, will be created by buyer app in confirm API"
           },
           "state": {
-            "type": "string",
-            "enum": [
-              "Created",
-              "Accepted",
-              "Packed",
-              "In-progress",
-              "Completed",
-              "Shipped",
-              "Out-for-delivery",
-              "Delivered",
-              "RTO initiated",
-              "RTO delivered",
-              "Cancelled"
-            ]
+            "type": "string"
           },
           "provider": {
             "type": "object",
@@ -3409,11 +3230,15 @@
           },
           "items": {
             "type": "array",
+            "maxItems": 1,
             "items": {
               "type": "object",
               "properties": {
                 "id": {
                   "$ref": "#/components/schemas/Item/properties/id"
+                },
+                "category_id": {
+                  "$ref": "#/components/schemas/Category/properties/id"
                 },
                 "quantity": {
                   "$ref": "#/components/schemas/ItemQuantity/properties/selected"
@@ -3473,28 +3298,97 @@
           "payment": {
             "$ref": "#/components/schemas/Payment"
           },
-          "@ondc/org/cancellation": {
-            "$ref": "#/components/schemas/Cancellation"
-          },
-          "@ondc/org/linked_orders": {
-            "description": "payload for cascaded orders e.g. order for logistics services linked to a retail order",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
-          },
           "created_at": {
-            "type": "string",
+            "type": ["string","null"],
             "format": "date-time"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "@ondc/org/created_by": {
+            "description": "order created by",
+            "type": "string",
+            "enum": [
+              "buyer-app",
+              "seller-app"
+            ]
+          },
+          "@ondc/org/cancellation": {
+            "$ref": "#/components/schemas/Cancellation"
+          },
+          "@ondc/org/linked_order": {
+            "type": "object",
+            "description": "payload for linked order e.g. retail order that cascaded into this logistics order",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "category_id": {
+                      "type": "string"
+                    },
+                    "descriptor": {
+                      "$ref": "#/components/schemas/Descriptor"
+                    },
+                    "quantity": {
+                      "$ref": "#/components/schemas/ItemQuantity/properties/selected"
+                    },
+                    "price": {
+                      "$ref": "#/components/schemas/Price"
+                    }
+                  }
+                }
+              },
+              "provider": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/Provider/properties/id"
+                  },
+                  "descriptor": {
+                    "$ref": "#/components/schemas/Descriptor"
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                }
+              },
+              "order": {
+                "description": "use same units for weight and dimensions as defined for Intent",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/Order/properties/id"
+                  },
+                  "weight": {
+                    "$ref": "#/components/schemas/Scalar"
+                  },
+                  "dimensions": {
+                    "$ref": "#/components/schemas/Dimensions"
+                  },
+                  "declared_value": {
+                    "$ref": "#/components/schemas/Price"
+                  },
+                  "taxable_value": {
+                    "$ref": "#/components/schemas/Price"
+                  },
+                  "hsn_code": {
+                    "type": "string"
+                  },
+                  "sgst_amount": {
+                    "$ref": "#/components/schemas/DecimalValue"
+                  },
+                  "cgst_amount": {
+                    "$ref": "#/components/schemas/DecimalValue"
+                  },
+                  "igst_amount": {
+                    "$ref": "#/components/schemas/DecimalValue"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -3591,70 +3485,12 @@
               "BPP"
             ]
           },
-          "@ondc/org/collected_by_status": {
-            "type": "string",
-            "enum": [
-              "Assert",
-              "Agree",
-              "Disagree",
-              "Terminate"
-            ]
-          },
-          "@ondc/org/buyer_app_finder_fee_type": {
-            "type": "string",
-            "enum": [
-              "Amount",
-              "Percent"
-            ]
-          },
-          "@ondc/org/buyer_app_finder_fee_amount": {
-            "$ref": "#/components/schemas/DecimalValue"
-          },
-          "@ondc/org/withholding_amount": {
-            "$ref": "#/components/schemas/DecimalValue"
-          },
-          "@ondc/org/withholding_amount_status": {
-            "type": "string",
-            "enum": [
-              "Assert",
-              "Agree",
-              "Disagree",
-              "Terminate"
-            ]
-          },
-          "@ondc/org/return_window": {
-            "description": "return window for the item in ISO8601 durations format e.g. 'PT24H' indicates 24 hour return window",
+          "@ondc/org/collection_amount": {
+            "description": "CoD collection amount",
             "type": "string"
           },
-          "@ondc/org/return_window_status": {
-            "type": "string",
-            "enum": [
-              "Assert",
-              "Agree",
-              "Disagree",
-              "Terminate"
-            ]
-          },
-          "@ondc/org/settlement_basis": {
-            "description": "In case of prepaid payment, whether settlement between counterparties should be on the basis of collection, shipment or delivery",
-            "type": "string",
-            "enum": [
-              "Collection",
-              "Shipment",
-              "Delivery"
-            ]
-          },
-          "@ondc/org/settlement_basis_status": {
-            "type": "string",
-            "enum": [
-              "Assert",
-              "Agree",
-              "Disagree",
-              "Terminate"
-            ]
-          },
           "@ondc/org/settlement_window": {
-            "description": "return window for the item in ISO8601 durations format e.g. 'PT24H' indicates 24 hour return window",
+            "description": "settlement window in ISO8601 durations format e.g. 'PT48H' indicates T+2 settlement",
             "type": "string"
           },
           "@ondc/org/settlement_window_status": {
@@ -3674,18 +3510,8 @@
                 "settlement_counterparty": {
                   "type": "string",
                   "enum": [
-                    "buyer",
                     "buyer-app",
-                    "seller-app",
-                    "logistics-provider"
-                  ]
-                },
-                "settlement_phase": {
-                  "type": "string",
-                  "enum": [
-                    "sale-amount",
-                    "withholding-amount",
-                    "refund"
+                    "seller-app"
                   ]
                 },
                 "settlement_type": {
@@ -3704,18 +3530,6 @@
                 },
                 "upi_address": {
                   "description": "UPI payment address e.g. VPA",
-                  "type": "string"
-                },
-                "bank_name": {
-                  "description": "Bank name",
-                  "type": "string"
-                },
-                "branch_name": {
-                  "description": "Branch name",
-                  "type": "string"
-                },
-                "beneficiary_address": {
-                  "description": "Beneficiary Address",
                   "type": "string"
                 },
                 "settlement_status": {
@@ -3827,22 +3641,11 @@
             "description": "Id of the provider"
           },
           "descriptor": {
-            "$ref": "#/components/schemas/Descriptor",
-            "required": [
-              "name",
-              "symbol",
-              "short_desc",
-              "long_desc",
-              "images"
-            ]
+            "$ref": "#/components/schemas/Descriptor"
           },
           "category_id": {
             "type": "string",
             "description": "Category Id of the provider"
-          },
-          "@ondc/org/fssai_license_no": {
-            "type": "string",
-            "description": "FSSAI license no. Mandatory for category_id \"F&B\""
           },
           "rating": {
             "$ref": "#/components/schemas/Rating/properties/value"
@@ -3898,10 +3701,6 @@
               "$ref": "#/components/schemas/Item"
             }
           },
-          "ttl": {
-            "type": "string",
-            "description": "Validity of catalog in ISO8601 durations format after which it has to be refreshed e.g. 'P7D' indicates validity of 7 days; value of 0 indicates catalog is not cacheable"
-          },
           "exp": {
             "type": "string",
             "description": "Time after which catalog has to be refreshed",
@@ -3913,10 +3712,7 @@
           "tags": {
             "$ref": "#/components/schemas/Tags"
           }
-        },
-        "required": [
-          "id"
-        ]
+        }
       },
       "Quotation": {
         "description": "Describes a quote",
@@ -3933,18 +3729,13 @@
                 "@ondc/org/item_id": {
                   "$ref": "#/components/schemas/Item/properties/id"
                 },
-                "@ondc/org/item_quantity": {
-                  "$ref": "#/components/schemas/ItemQuantity/properties/selected"
-                },
                 "@ondc/org/title_type": {
                   "type": "string",
                   "enum": [
-                    "item",
-                    "delivery",
-                    "packing",
-                    "tax",
-                    "convenience charge",
-                    "discount"
+                    "Delivery Charge",
+                    "RTO Charge",
+                    "Reverse QC Charge",
+                    "Tax"
                   ]
                 },
                 "title": {
@@ -3959,11 +3750,7 @@
           "ttl": {
             "$ref": "#/components/schemas/Duration"
           }
-        },
-        "required": [
-          "breakup",
-          "price"
-        ]
+        }
       },
       "Rateable": {
         "description": "If the entity can be rated or not",

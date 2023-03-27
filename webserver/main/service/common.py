@@ -1,49 +1,77 @@
 import json
 import requests
-from pika.exceptions import StreamLostError
-from retry import retry
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
-from main.utils.cryptic_utils import create_authorisation_header
+from main.models.error import DatabaseError
+from main.models.ondc_request import OndcDomain, OndcAction
+from main.repository.ack_response import get_ack_response
+from main.repository.db import add_ondc_request, get_first_ondc_request, get_ondc_requests
+from main.service.utils import make_request_over_ondc_network
 from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
-from main.utils.webhook_utils import post_on_bg_or_bap
-from main.utils.rabbitmq_utils import declare_queue, publish_message_to_queue, close_connection, \
-    open_connection_and_channel_if_not_already_open
-
-rabbitmq_connection, rabbitmq_channel = None, None
-
-
-@retry(StreamLostError, tries=3, delay=1, jitter=(1, 3))
-def send_message_to_queue_for_given_request(request_type, payload):
-    global rabbitmq_connection, rabbitmq_channel
-    rabbitmq_connection, rabbitmq_channel = open_connection_and_channel_if_not_already_open(rabbitmq_connection,
-                                                                                            rabbitmq_channel)
-    queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
-    declare_queue(rabbitmq_channel, queue_name)
-    payload['request_type'] = request_type
-    publish_message_to_queue(rabbitmq_channel, exchange='', routing_key=queue_name, body=json.dumps(payload))
+from main.utils.webhook_utils import post_count_response_to_client
 
 
 @check_for_exception
-def send_bpp_responses_to_bg_or_bpp(request_type, payload):
-    client_responses = get_responses_from_client(request_type, payload)
-    gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if request_type == "search" else \
-        payload['context']['bap_uri']
-    url_with_route = f"{gateway_or_bap_endpoint}{client_responses['context']['action']}" \
-        if gateway_or_bap_endpoint.endswith("/") \
-        else f"{gateway_or_bap_endpoint}/{client_responses['context']['action']}"
+def send_bpp_responses_to_bg_or_bpp(message):
+    log(f"{message['request_type']} payload: {message}")
+    action = message['request_type'].split("_")[-1]
+    message_id = message['message_ids'][action]
+    payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction(action), message_id)
+    client_responses, _ = get_responses_from_client(action, payload)
 
-    auth_header = create_authorisation_header(client_responses)
-    status_code = post_on_bg_or_bap(url_with_route, client_responses, headers={'Authorization': auth_header})
+    gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if action == "search" else \
+        payload['context']['bap_uri']
+    status_code = make_request_over_ondc_network(client_responses, gateway_or_bap_endpoint,
+                                                 client_responses['context']['action'])
     # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
-    #                             payload, headers={'Authorization': auth_header})
+    #                             json=payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
 def get_responses_from_client(request_type, payload):
     client_endpoint = get_config_by_name('BPP_CLIENT_ENDPOINT')
     response = requests.post(f"{client_endpoint}/{request_type}", json=payload)
-    return json.loads(response.text)
+    return json.loads(response.text), response.status_code
+
+
+def dump_request_payload(request_payload, domain, action=None):
+    message_id = request_payload['context']['message_id']
+    action = action if action else request_payload['context']['action']
+    is_successful = add_ondc_request(domain=OndcDomain(domain), action=OndcAction(action), message_id=message_id,
+                                        request=request_payload)
+    if is_successful:
+        return get_ack_response(ack=True)
+    else:
+        return get_ack_response(ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
+
+
+def get_network_request_payloads(**kwargs):
+    kwargs = {k: v for k, v in kwargs.items() if v is not None}
+    response = {}
+    for k, v in kwargs.items():
+        key_parts = k.split("_", maxsplit=1)
+        domain, action = key_parts[0], key_parts[1]
+        message_ids = [x.strip() for x in v.split(",")]
+        ondc_requests = []
+        for m in message_ids:
+            ondc_requests.extend(get_ondc_requests(OndcDomain(domain), OndcAction(action), m))
+        response[k] = ondc_requests
+    return response
+
+
+@check_for_exception
+def send_logistics_on_call_count_to_client(message, request_type="on_search"):
+    log(f"logistics {request_type} payload: {message}")
+    on_call_message_id = message['message_ids'][request_type]
+    on_call_requests = get_ondc_requests(OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
+    on_call_requests_count = len(on_call_requests)
+    on_call_transaction_id = on_call_requests[0]['context']['transaction_id'] if on_call_requests_count > 0 else None
+    post_count_response_to_client(request_type,
+                                  {
+                                      "messageId": on_call_message_id,
+                                      "transactionId": on_call_transaction_id,
+                                      "count": on_call_requests_count,
+                                  })
 
