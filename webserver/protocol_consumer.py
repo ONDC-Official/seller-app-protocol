@@ -19,6 +19,8 @@ from main.service.status_service import send_status_payload_to_client, make_logi
     send_status_response_to_bap
 from main.service.update_service import send_update_response_to_bap, make_logistics_update, \
     send_update_payload_to_client
+from main.service.issue_service import send_issue_response_to_bap, make_logistics_issue, \
+    send_issue_payload_to_client
 from main.utils.rabbitmq_utils import create_channel, declare_queue, consume_message, open_connection
 
 from main.service.common import send_bpp_responses_to_bg_or_bpp, send_logistics_on_call_count_to_client
@@ -42,6 +44,7 @@ request_type_to_function_mapping = {
     "retail_on_cancel": send_cancel_response_to_bap,
     "retail_update": send_update_payload_to_client,
     "retail_on_update": send_update_response_to_bap,
+    "retail_on_issue": send_issue_response_to_bap,
 
     "logistics_search": make_logistics_search,
     "logistics_init": make_logistics_init,
@@ -51,6 +54,7 @@ request_type_to_function_mapping = {
     "logistics_support": make_logistics_support,
     "logistics_cancel": make_logistics_cancel,
     "logistics_update": make_logistics_update,
+    "logistics_issue": make_logistics_issue,
 
     "logistics_on_search": lambda m: send_logistics_on_call_count_to_client(m, "on_search"),
     "logistics_on_init": lambda m: send_logistics_on_call_count_to_client(m, "on_init"),
@@ -60,13 +64,15 @@ request_type_to_function_mapping = {
     "logistics_on_support": lambda m: send_logistics_on_call_count_to_client(m, "on_support"),
     "logistics_on_cancel": lambda m: send_logistics_on_call_count_to_client(m, "on_cancel"),
     "logistics_on_update": lambda m: send_logistics_on_call_count_to_client(m, "on_update"),
+    "logistics_on_issue": lambda m: send_logistics_on_call_count_to_client(m, "on_issue"),
 }
 
 
 def consume_fn(message_string):
     payload = json.loads(message_string)
     request_type = payload.get('request_type')
-    request_type_consume_fn = request_type_to_function_mapping.get(request_type, send_bpp_responses_to_bg_or_bpp)
+    request_type_consume_fn = request_type_to_function_mapping.get(
+        request_type, send_bpp_responses_to_bg_or_bpp)
     request_type_consume_fn(payload)
 
 
@@ -76,9 +82,9 @@ def run_consumer():
     connection = open_connection()
     channel = create_channel(connection)
     declare_queue(channel, queue_name)
-    consume_message(connection, channel, queue_name=queue_name, consume_fn=consume_fn)
+    consume_message(connection, channel, queue_name=queue_name,
+                    consume_fn=consume_fn)
 
 
 if __name__ == "__main__":
     run_consumer()
-
