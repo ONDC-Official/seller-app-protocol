@@ -37,6 +37,8 @@ class Config:
     RABBITMQ_QUEUE_NAME = os.getenv("RABBITMQ_QUEUE_NAME", "bpp_protocol")
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
     BPP_CLIENT_ENDPOINT = os.getenv("BPP_CLIENT_ENDPOINT", "client")
+    IGM_CLIENT_ENDPOINT = os.getenv(
+        "IGM_CLIENT_ENDPOINT", "http://seller-app-igm:8000/api")
     BG_DEFAULT_URL = os.getenv("BG_DEFAULT_URL", "https://pilot-gateway-1.beckn.nsdl.co.in/")
     BG_DEFAULT_URL_FLAG = os.getenv("BG_DEFAULT_URL_FLAG", "True") == "True"
     LOGISTICS_ON_SEARCH_WAIT = int(os.getenv("LOGISTICS_ON_SEARCH_WAIT", "3"))

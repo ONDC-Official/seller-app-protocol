@@ -44,6 +44,7 @@ request_type_to_function_mapping = {
     "retail_on_cancel": send_cancel_response_to_bap,
     "retail_update": send_update_payload_to_client,
     "retail_on_update": send_update_response_to_bap,
+    "retail_issue": send_issue_payload_to_client,
     "retail_on_issue": send_issue_response_to_bap,
 
     "logistics_search": make_logistics_search,

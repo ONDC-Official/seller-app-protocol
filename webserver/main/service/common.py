@@ -18,7 +18,8 @@ def send_bpp_responses_to_bg_or_bpp(message):
     log(f"{message['request_type']} payload: {message}")
     action = message['request_type'].split("_")[-1]
     message_id = message['message_ids'][action]
-    payload = get_first_ondc_request(OndcDomain.RETAIL, OndcAction(action), message_id)
+    payload = get_first_ondc_request(
+        OndcDomain.RETAIL, OndcAction(action), message_id)
     client_responses, _ = get_responses_from_client(action, payload)
 
     gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if action == "search" else \
@@ -31,7 +32,10 @@ def send_bpp_responses_to_bg_or_bpp(message):
 
 
 def get_responses_from_client(request_type, payload):
-    client_endpoint = get_config_by_name('BPP_CLIENT_ENDPOINT')
+    if "issue" in request_type:
+        client_endpoint = get_config_by_name('IGM_CLIENT_ENDPOINT')
+    else:
+        client_endpoint = get_config_by_name('BPP_CLIENT_ENDPOINT')
     response = requests.post(f"{client_endpoint}/{request_type}", json=payload)
     return json.loads(response.text), response.status_code
 
@@ -40,7 +44,7 @@ def dump_request_payload(request_payload, domain, action=None):
     message_id = request_payload['context']['message_id']
     action = action if action else request_payload['context']['action']
     is_successful = add_ondc_request(domain=OndcDomain(domain), action=OndcAction(action), message_id=message_id,
-                                        request=request_payload)
+                                     request=request_payload)
     if is_successful:
         return get_ack_response(ack=True)
     else:
@@ -56,7 +60,8 @@ def get_network_request_payloads(**kwargs):
         message_ids = [x.strip() for x in v.split(",")]
         ondc_requests = []
         for m in message_ids:
-            ondc_requests.extend(get_ondc_requests(OndcDomain(domain), OndcAction(action), m))
+            ondc_requests.extend(get_ondc_requests(
+                OndcDomain(domain), OndcAction(action), m))
         response[k] = ondc_requests
     return response
 
@@ -65,13 +70,14 @@ def get_network_request_payloads(**kwargs):
 def send_logistics_on_call_count_to_client(message, request_type="on_search"):
     log(f"logistics {request_type} payload: {message}")
     on_call_message_id = message['message_ids'][request_type]
-    on_call_requests = get_ondc_requests(OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
+    on_call_requests = get_ondc_requests(
+        OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
     on_call_requests_count = len(on_call_requests)
-    on_call_transaction_id = on_call_requests[0]['context']['transaction_id'] if on_call_requests_count > 0 else None
+    on_call_transaction_id = on_call_requests[0]['context'][
+        'transaction_id'] if on_call_requests_count > 0 else None
     post_count_response_to_client(request_type,
                                   {
                                       "messageId": on_call_message_id,
                                       "transactionId": on_call_transaction_id,
                                       "count": on_call_requests_count,
                                   })
-

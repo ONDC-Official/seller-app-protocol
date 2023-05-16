@@ -17,7 +17,7 @@ logistics_issue_namespace = Namespace(
 
 @logistics_issue_namespace.route("/logistics/v1/issue")
 class Issue(Resource):
-    path_schema = get_json_schema_for_given_path('/issue', domain="logistics")
+    # path_schema = get_json_schema_for_given_path('/issue', domain="logistics")
 
     # @expects_json(path_schema)
     def post(self):
@@ -39,8 +39,8 @@ class Issue(Resource):
 
 @logistics_issue_namespace.route("/logistics/v1/on_issue")
 class OnInit(Resource):
-    path_schema = get_json_schema_for_given_path(
-        '/on_issue', domain="logistics")
+    # path_schema = get_json_schema_for_given_path(
+    #     '/on_issue', domain="logistics")
 
     # @expects_json(path_schema)
     def post(self):

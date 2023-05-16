@@ -16,11 +16,11 @@ issue_namespace = Namespace('issue', description='Issue Namespace')
 
 @issue_namespace.route("/v1/issue")
 class IssueOrder(Resource):
-    path_schema = get_json_schema_for_given_path('/issue')
+    # path_schema = get_json_schema_for_given_path('/issue')
 
     # @expects_json(path_schema)
     def post(self):
-        response_schema = get_json_schema_for_response('/issue')
+        # response_schema = get_json_schema_for_response('/issue')
         resp = get_ack_response(ack=True)
         payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
@@ -31,17 +31,17 @@ class IssueOrder(Resource):
             }
         }
         send_message_to_queue_for_given_request(message)
-        validate(resp, response_schema)
+        # validate(resp, response_schema)
         return resp
 
 
 @issue_namespace.route("/v1/on_issue")
 class OnSelectOrder(Resource):
-    path_schema = get_json_schema_for_given_path('/on_issue')
+    # path_schema = get_json_schema_for_given_path('/on_issue')
 
     # @expects_json(path_schema)
     def post(self):
-        response_schema = get_json_schema_for_response('/on_issue')
+        # response_schema = get_json_schema_for_response('/on_issue')
         resp = get_ack_response(ack=True)
         payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
@@ -52,5 +52,5 @@ class OnSelectOrder(Resource):
             }
         }
         send_message_to_queue_for_given_request(message)
-        validate(resp, response_schema)
+        # validate(resp, response_schema)
         return resp
