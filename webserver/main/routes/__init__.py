@@ -29,6 +29,9 @@ from main.routes.retail.update import update_namespace
 from main.utils.schema_utils import transform_json_schema_error
 from main.routes.retail.issue import issue_namespace
 from main.routes.logistics.issue import logistics_issue_namespace
+from main.routes.retail.issue_status import issue_status_namespace
+from main.routes.logistics.issue_status import logistics_issue_status_namespace
+
 
 class Api(BaseAPI):
     def _register_doc(self, app_or_blueprint):
@@ -81,6 +84,7 @@ api.add_namespace(support_namespace, path='/protocol')
 api.add_namespace(track_namespace, path='/protocol')
 api.add_namespace(update_namespace, path='/protocol')
 api.add_namespace(issue_namespace, path='/protocol')
+api.add_namespace(issue_status_namespace, path='/protocol')
 api.add_namespace(logistics_search_namespace, path='/protocol')
 api.add_namespace(logistics_init_namespace, path='/protocol')
 api.add_namespace(logistics_confirm_namespace, path='/protocol')
@@ -90,4 +94,5 @@ api.add_namespace(logistics_support_namespace, path='/protocol')
 api.add_namespace(logistics_cancel_namespace, path='/protocol')
 api.add_namespace(logistics_update_namespace, path='/protocol')
 api.add_namespace(logistics_issue_namespace, path='/protocol')
+api.add_namespace(logistics_issue_status_namespace, path='/protocol')
 api.add_namespace(response_namespace, path='/protocol')

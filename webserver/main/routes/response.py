@@ -19,6 +19,7 @@ class GetNetworkRequestPayloads(Resource):
         parser.add_argument("cancel", dest="retail_cancel", required=False)
         parser.add_argument("update", dest="retail_update", required=False)
         parser.add_argument("issue", dest="retail_issue", required=False)
+        parser.add_argument("issue_status", dest="retail_issue_status", required=False)
         parser.add_argument("logisticsOnSearch", dest="logistics_on_search", required=False)
         parser.add_argument("logisticsOnInit", dest="logistics_on_init", required=False)
         parser.add_argument("logisticsOnConfirm", dest="logistics_on_confirm", required=False)
@@ -28,6 +29,7 @@ class GetNetworkRequestPayloads(Resource):
         parser.add_argument("logisticsOnCancel", dest="logistics_on_cancel", required=False)
         parser.add_argument("logisticsOnUpdate", dest="logistics_on_update", required=False)
         parser.add_argument("logisticsOnIssue", dest="logistics_on_issue", required=False)
+        parser.add_argument("logisticsOnIssueStatus", dest="logistics_on_issue_status", required=False)
         return parser.parse_args()
 
     def get(self):

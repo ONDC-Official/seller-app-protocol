@@ -4,7 +4,7 @@ from main.models.init_database import dbBase
 from sqlalchemy import Column, Integer, String, DateTime, Enum, Float, JSON
 
 collection_names = ["on_search_items", "on_select", "on_init", "on_confirm", "on_cancel", "on_issue", "on_status", "on_support",
-                    "on_track", "on_update"]
+                    "on_track", "on_update", "on_issue_status"]
 
 
 class OndcAction(enum.Enum):
@@ -19,6 +19,7 @@ class OndcAction(enum.Enum):
     UPDATE = "update"
     RATING = "rating"
     ISSUE = "issue"
+    ISSUE_STATUS = "issue_status"
     ON_SEARCH = "on_search"
     ON_SELECT = "on_select"
     ON_INIT = "on_init"
@@ -30,6 +31,7 @@ class OndcAction(enum.Enum):
     ON_UPDATE = "on_update"
     ON_RATING = "on_rating"
     ON_ISSUE = "on_issue"
+    ON_ISSUE_STATUS = "on_issue_status"
 
 
 class OndcDomain(enum.Enum):
