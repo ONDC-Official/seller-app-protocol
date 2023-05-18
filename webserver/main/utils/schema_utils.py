@@ -28,7 +28,8 @@ def get_json_schema_for_given_path(path, request_type='post', domain="retail"):
 
 def get_json_schema_for_response(path, request_type='post', status_code=200, domain="retail"):
     domain_schema = logistics_json_schema if domain == "logistics" else retail_json_schema
-    path_schema = domain_schema['paths'][path][request_type]['responses'][str(status_code)]['content']['application/json']['schema']
+    path_schema = domain_schema['paths'][path][request_type]['responses'][str(
+        status_code)]['content']['application/json']['schema']
     path_schema['title'] = 'Something'
     path_schema.update(domain_schema)
     return path_schema
