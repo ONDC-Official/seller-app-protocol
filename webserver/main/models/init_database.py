@@ -20,6 +20,7 @@ if os.getenv('FLASK_SERVER', 'True') == 'True':
     app.debug = get_config_by_name('DEBUG')
     app.config['SQLALCHEMY_DATABASE_URI'] = db_string
     app.config['SQLALCHEMY_POOL_SIZE'] = pool_size
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db = SQLAlchemy(app)
     db_session = db.session
     dbBase = db.Model

@@ -27,6 +27,10 @@ from main.routes.retail.support import support_namespace
 from main.routes.retail.track import track_namespace
 from main.routes.retail.update import update_namespace
 from main.utils.schema_utils import transform_json_schema_error
+from main.routes.retail.issue import issue_namespace
+from main.routes.logistics.issue import logistics_issue_namespace
+from main.routes.retail.issue_status import issue_status_namespace
+from main.routes.logistics.issue_status import logistics_issue_status_namespace
 
 
 class Api(BaseAPI):
@@ -35,7 +39,7 @@ class Api(BaseAPI):
         if self._add_specs and self._doc:
             # Register documentation before root if enabled
             app_or_blueprint.add_url_rule(self._doc, 'doc', self.render_doc)
-        #app_or_blueprint.add_url_rule(self._doc, 'root', self.render_root)
+        # app_or_blueprint.add_url_rule(self._doc, 'root', self.render_root)
 
     @property
     def base_path(self):
@@ -79,6 +83,8 @@ api.add_namespace(status_namespace, path='/protocol')
 api.add_namespace(support_namespace, path='/protocol')
 api.add_namespace(track_namespace, path='/protocol')
 api.add_namespace(update_namespace, path='/protocol')
+api.add_namespace(issue_namespace, path='/protocol')
+api.add_namespace(issue_status_namespace, path='/protocol')
 api.add_namespace(logistics_search_namespace, path='/protocol')
 api.add_namespace(logistics_init_namespace, path='/protocol')
 api.add_namespace(logistics_confirm_namespace, path='/protocol')
@@ -87,4 +93,6 @@ api.add_namespace(logistics_status_namespace, path='/protocol')
 api.add_namespace(logistics_support_namespace, path='/protocol')
 api.add_namespace(logistics_cancel_namespace, path='/protocol')
 api.add_namespace(logistics_update_namespace, path='/protocol')
+api.add_namespace(logistics_issue_namespace, path='/protocol')
+api.add_namespace(logistics_issue_status_namespace, path='/protocol')
 api.add_namespace(response_namespace, path='/protocol')

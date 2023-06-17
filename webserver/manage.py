@@ -14,7 +14,7 @@ def create_tables():
 api.init_app(app)
 CORS(app)
 create_tables()
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if __name__ == "__main__":
     if os.getenv("ENV") is not None:
