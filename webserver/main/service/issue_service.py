@@ -50,6 +50,3 @@ def send_issue_response_to_bap(message):
         on_issue_payload, bap_endpoint, 'on_issue')
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
-
-if __name__ == "__main__":
-    pass
