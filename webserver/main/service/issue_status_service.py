@@ -51,5 +51,3 @@ def send_issue_status_response_to_bap(message):
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
-if __name__ == "__main__":
-    pass
