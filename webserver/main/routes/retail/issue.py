@@ -21,7 +21,6 @@ class IssueOrder(Resource):
     # @expects_json(path_schema)
     def post(self):
         response_schema = get_json_schema_for_response('/issue')
-        print("response_schema", response_schema)
         resp = get_ack_response(ack=True)
         payload = request.get_json()
         dump_request_payload(payload, domain=OndcDomain.RETAIL.value)
