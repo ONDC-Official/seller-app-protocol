@@ -6,22 +6,12 @@ from werkzeug.exceptions import BadRequest
 
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
-from main.routes.logistics.issue import logistics_issue_namespace
-from main.routes.logistics.search import logistics_search_namespace
-from main.routes.logistics.update import logistics_update_namespace
-from main.routes.logistics.cancel import logistics_cancel_namespace
-from main.routes.logistics.confirm import logistics_confirm_namespace
-from main.routes.logistics.init import logistics_init_namespace
-from main.routes.logistics.status import logistics_status_namespace
-from main.routes.logistics.support import logistics_support_namespace
-from main.routes.logistics.track import logistics_track_namespace
 
 from main.routes.logistics.client import logistics_client_namespace
 from main.routes.logistics.ondc_network import logistics_ondc_network_namespace
 from main.routes.response import response_namespace
 from main.routes.retail.ondc_network import retail_ondc_network_namespace
 from main.routes.retail.client import retail_client_namespace
-from main.routes.logistics.issue_status import logistics_issue_status_namespace
 from main.utils.schema_utils import transform_json_schema_error
 
 

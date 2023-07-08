@@ -8,7 +8,7 @@ from jsonschema.validators import validate
 from main import constant
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
-from main.request_models.search import request_type_to_class_mapping
+from main.request_models.request import request_type_to_class_mapping
 from main.utils.schema_utils import get_json_schema_for_given_path, transform_json_schema_error
 
 
@@ -16,6 +16,7 @@ def validate_payload_schema_based_on_version(request_payload, request_type):
     if request_payload[constant.CONTEXT]["core_version"] != "1.2.0":
         return validate_payload_schema_using_json_schema(request_payload, request_type)
     else:
+        print("here")
         return validate_payload_schema_using_pydantic_classes(request_payload, request_type)
 
 
