@@ -8,21 +8,21 @@ from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
 from main.utils.validation import validate_payload_schema_based_on_version
 
-retail_client_namespace = Namespace("retail_client", description="Retail Client Namespace")
+logistics_client_namespace = Namespace("logistics_client", description="Logistics Client Namespace")
 
 
-@retail_client_namespace.route("/v1/on_search")
-class OnSearchRequest(Resource):
+@logistics_client_namespace.route("/v1/search")
+class SearchRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_search")
+        resp = validate_payload_schema_based_on_version(request_payload, "search")
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_search",
+                "request_type": f"{OndcDomain.RETAIL.value}_search",
                 "message_ids": {
-                    "on_search": request_payload[constant.CONTEXT]["message_id"]
+                    "search": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -31,17 +31,17 @@ class OnSearchRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_select")
-class OnSelectRequest(Resource):
+@logistics_client_namespace.route("/v1/select")
+class SelectRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_select")
+        resp = validate_payload_schema_based_on_version(request_payload, "select")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_select",
+                "request_type": f"{OndcDomain.RETAIL.value}_select",
                 "message_ids": {
-                    "on_select": request_payload[constant.CONTEXT]["message_id"]
+                    "select": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -50,17 +50,17 @@ class OnSelectRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_init")
-class OnInitRequest(Resource):
+@logistics_client_namespace.route("/v1/init")
+class InitRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_init")
+        resp = validate_payload_schema_based_on_version(request_payload, "init")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_init",
+                "request_type": f"{OndcDomain.RETAIL.value}_init",
                 "message_ids": {
-                    "on_init": request_payload[constant.CONTEXT]["message_id"]
+                    "init": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -69,17 +69,17 @@ class OnInitRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_confirm")
-class OnConfirmRequest(Resource):
+@logistics_client_namespace.route("/v1/confirm")
+class ConfirmRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_confirm")
+        resp = validate_payload_schema_based_on_version(request_payload, "confirm")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_confirm",
+                "request_type": f"{OndcDomain.RETAIL.value}_confirm",
                 "message_ids": {
-                    "on_confirm": request_payload[constant.CONTEXT]["message_id"]
+                    "confirm": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -88,17 +88,17 @@ class OnConfirmRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_cancel")
-class OnCancelRequest(Resource):
+@logistics_client_namespace.route("/v1/cancel")
+class CancelRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_cancel")
+        resp = validate_payload_schema_based_on_version(request_payload, "cancel")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_cancel",
+                "request_type": f"{OndcDomain.RETAIL.value}_cancel",
                 "message_ids": {
-                    "on_cancel": request_payload[constant.CONTEXT]["message_id"]
+                    "cancel": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -107,17 +107,17 @@ class OnCancelRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_cancellation_reasons")
-class OnCancellationReasonsRequest(Resource):
+@logistics_client_namespace.route("/v1/cancellation_reasons")
+class CancellationReasonsRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons")
+        resp = validate_payload_schema_based_on_version(request_payload, "cancellation_reasons")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_cancellation_reasons",
+                "request_type": f"{OndcDomain.RETAIL.value}_cancellation_reasons",
                 "message_ids": {
-                    "on_cancellation_reasons": request_payload[constant.CONTEXT]["message_id"]
+                    "cancellation_reasons": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -126,17 +126,17 @@ class OnCancellationReasonsRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_issue")
-class OnIssueRequest(Resource):
+@logistics_client_namespace.route("/v1/issue")
+class IssueRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_issue")
+        resp = validate_payload_schema_based_on_version(request_payload, "issue")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_issue",
+                "request_type": f"{OndcDomain.RETAIL.value}_issue",
                 "message_ids": {
-                    "on_issue": request_payload[constant.CONTEXT]["message_id"]
+                    "issue": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -145,17 +145,17 @@ class OnIssueRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_issue_status")
-class OnIssueStatusRequest(Resource):
+@logistics_client_namespace.route("/v1/issue_status")
+class IssueStatusRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status")
+        resp = validate_payload_schema_based_on_version(request_payload, "issue_status")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_issue_status",
+                "request_type": f"{OndcDomain.RETAIL.value}_issue_status",
                 "message_ids": {
-                    "on_issue_status": request_payload[constant.CONTEXT]["message_id"]
+                    "issue_status": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -164,17 +164,17 @@ class OnIssueStatusRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_rating")
-class OnRatingRequest(Resource):
+@logistics_client_namespace.route("/v1/rating")
+class RatingRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_rating")
+        resp = validate_payload_schema_based_on_version(request_payload, "rating")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_rating",
+                "request_type": f"{OndcDomain.RETAIL.value}_rating",
                 "message_ids": {
-                    "on_rating": request_payload[constant.CONTEXT]["message_id"]
+                    "rating": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -183,17 +183,17 @@ class OnRatingRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_status")
-class OnStatusRequest(Resource):
+@logistics_client_namespace.route("/v1/status")
+class StatusRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_status")
+        resp = validate_payload_schema_based_on_version(request_payload, "status")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_status",
+                "request_type": f"{OndcDomain.RETAIL.value}_status",
                 "message_ids": {
-                    "on_status": request_payload[constant.CONTEXT]["message_id"]
+                    "status": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -202,17 +202,17 @@ class OnStatusRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_support")
-class OnSupportRequest(Resource):
+@logistics_client_namespace.route("/v1/support")
+class SupportRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_support")
+        resp = validate_payload_schema_based_on_version(request_payload, "support")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_support",
+                "request_type": f"{OndcDomain.RETAIL.value}_support",
                 "message_ids": {
-                    "on_support": request_payload[constant.CONTEXT]["message_id"]
+                    "support": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -221,17 +221,17 @@ class OnSupportRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_track")
-class OnTrackRequest(Resource):
+@logistics_client_namespace.route("/v1/track")
+class TrackRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_track")
+        resp = validate_payload_schema_based_on_version(request_payload, "track")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_track",
+                "request_type": f"{OndcDomain.RETAIL.value}_track",
                 "message_ids": {
-                    "on_track": request_payload[constant.CONTEXT]["message_id"]
+                    "track": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)
@@ -240,17 +240,17 @@ class OnTrackRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_update")
-class OnUpdateRequest(Resource):
+@logistics_client_namespace.route("/v1/update")
+class UpdateRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_update")
+        resp = validate_payload_schema_based_on_version(request_payload, "update")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_on_update",
+                "request_type": f"{OndcDomain.RETAIL.value}_update",
                 "message_ids": {
-                    "on_update": request_payload[constant.CONTEXT]["message_id"]
+                    "update": request_payload[constant.CONTEXT]["message_id"]
                 }
             }
             send_message_to_queue_for_given_request(message)

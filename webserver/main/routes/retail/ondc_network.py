@@ -9,10 +9,10 @@ from main.service.common import dump_request_payload
 from main.service.utils import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
 
-ondc_network_namespace = Namespace("ondc_network", description="ONDC Network Namespace")
+retail_ondc_network_namespace = Namespace("retail_ondc_network", description="Retail ONDC Network Namespace")
 
 
-@ondc_network_namespace.route("/v1/search")
+@retail_ondc_network_namespace.route("/v1/search")
 class SearchRequest(Resource):
 
     @validate_auth_header
@@ -33,7 +33,7 @@ class SearchRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/select")
+@retail_ondc_network_namespace.route("/v1/select")
 class SelectRequest(Resource):
 
     @validate_auth_header
@@ -53,7 +53,7 @@ class SelectRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/init")
+@retail_ondc_network_namespace.route("/v1/init")
 class InitRequest(Resource):
 
     @validate_auth_header
@@ -73,7 +73,7 @@ class InitRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/confirm")
+@retail_ondc_network_namespace.route("/v1/confirm")
 class ConfirmRequest(Resource):
 
     @validate_auth_header
@@ -93,7 +93,7 @@ class ConfirmRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/cancel")
+@retail_ondc_network_namespace.route("/v1/cancel")
 class CancelRequest(Resource):
 
     @validate_auth_header
@@ -113,7 +113,7 @@ class CancelRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/cancellation_reasons")
+@retail_ondc_network_namespace.route("/v1/cancellation_reasons")
 class CancellationReasonsRequest(Resource):
 
     @validate_auth_header
@@ -133,7 +133,7 @@ class CancellationReasonsRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/issue")
+@retail_ondc_network_namespace.route("/v1/issue")
 class IssueRequest(Resource):
 
     @validate_auth_header
@@ -153,7 +153,7 @@ class IssueRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/issue_status")
+@retail_ondc_network_namespace.route("/v1/issue_status")
 class IssueStatusRequest(Resource):
 
     @validate_auth_header
@@ -173,7 +173,7 @@ class IssueStatusRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/rating")
+@retail_ondc_network_namespace.route("/v1/rating")
 class RatingRequest(Resource):
 
     @validate_auth_header
@@ -193,7 +193,7 @@ class RatingRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/status")
+@retail_ondc_network_namespace.route("/v1/status")
 class StatusRequest(Resource):
 
     @validate_auth_header
@@ -213,7 +213,7 @@ class StatusRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/support")
+@retail_ondc_network_namespace.route("/v1/support")
 class SupportRequest(Resource):
 
     @validate_auth_header
@@ -233,7 +233,7 @@ class SupportRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/track")
+@retail_ondc_network_namespace.route("/v1/track")
 class TrackRequest(Resource):
 
     @validate_auth_header
@@ -253,7 +253,7 @@ class TrackRequest(Resource):
             return resp
 
 
-@ondc_network_namespace.route("/v1/update")
+@retail_ondc_network_namespace.route("/v1/update")
 class UpdateRequest(Resource):
 
     @validate_auth_header

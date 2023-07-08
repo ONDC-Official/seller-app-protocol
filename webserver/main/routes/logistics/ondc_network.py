@@ -6,14 +6,16 @@ from main.models.ondc_request import OndcDomain
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
+from main.service.utils import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
 
-retail_client_namespace = Namespace("retail_client", description="Retail Client Namespace")
+logistics_ondc_network_namespace = Namespace("logistics_ondc_network", description="Logistics ONDC Network Namespace")
 
 
-@retail_client_namespace.route("/v1/on_search")
+@logistics_ondc_network_namespace.route("/v1/on_search")
 class OnSearchRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_search")
@@ -31,9 +33,10 @@ class OnSearchRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_select")
+@logistics_ondc_network_namespace.route("/v1/on_select")
 class OnSelectRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_select")
@@ -50,9 +53,10 @@ class OnSelectRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_init")
+@logistics_ondc_network_namespace.route("/v1/on_init")
 class OnInitRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_init")
@@ -69,9 +73,10 @@ class OnInitRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_confirm")
+@logistics_ondc_network_namespace.route("/v1/on_confirm")
 class OnConfirmRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_confirm")
@@ -88,9 +93,10 @@ class OnConfirmRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_cancel")
+@logistics_ondc_network_namespace.route("/v1/on_cancel")
 class OnCancelRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancel")
@@ -107,9 +113,10 @@ class OnCancelRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_cancellation_reasons")
+@logistics_ondc_network_namespace.route("/v1/on_cancellation_reasons")
 class OnCancellationReasonsRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons")
@@ -126,9 +133,10 @@ class OnCancellationReasonsRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_issue")
+@logistics_ondc_network_namespace.route("/v1/on_issue")
 class OnIssueRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue")
@@ -145,9 +153,10 @@ class OnIssueRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_issue_status")
+@logistics_ondc_network_namespace.route("/v1/on_issue_status")
 class OnIssueStatusRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status")
@@ -164,9 +173,10 @@ class OnIssueStatusRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_rating")
+@logistics_ondc_network_namespace.route("/v1/on_rating")
 class OnRatingRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_rating")
@@ -183,9 +193,10 @@ class OnRatingRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_status")
+@logistics_ondc_network_namespace.route("/v1/on_status")
 class OnStatusRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_status")
@@ -202,9 +213,10 @@ class OnStatusRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_support")
+@logistics_ondc_network_namespace.route("/v1/on_support")
 class OnSupportRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_support")
@@ -221,9 +233,10 @@ class OnSupportRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_track")
+@logistics_ondc_network_namespace.route("/v1/on_track")
 class OnTrackRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_track")
@@ -240,9 +253,10 @@ class OnTrackRequest(Resource):
             return resp
 
 
-@retail_client_namespace.route("/v1/on_update")
+@logistics_ondc_network_namespace.route("/v1/on_update")
 class OnUpdateRequest(Resource):
 
+    @validate_auth_header
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_update")
