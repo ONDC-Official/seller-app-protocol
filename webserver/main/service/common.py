@@ -26,8 +26,6 @@ def send_bpp_responses_to_bg_or_bpp(message):
         payload['context']['bap_uri']
     status_code = make_request_over_ondc_network(client_responses, gateway_or_bap_endpoint,
                                                  client_responses['context']['action'])
-    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
-    #                             json=payload, headers={'Authorization': auth_header})
     log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
