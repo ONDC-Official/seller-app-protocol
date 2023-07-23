@@ -4,6 +4,7 @@ from pika.exceptions import AMQPConnectionError
 from retry import retry
 
 from main.config import get_config_by_name
+from main.models import init_database
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.service.retail import send_retail_payload_to_client, send_retail_response_to_ondc_network
 from main.service.logistics import make_logistics_request
@@ -31,6 +32,7 @@ def consume_fn(message_string):
 
 @retry(AMQPConnectionError, delay=5, jitter=(1, 3))
 def run_consumer():
+    init_database()
     queue_name = get_config_by_name('RABBITMQ_QUEUE_NAME')
     connection = open_connection()
     channel = create_channel(connection)
