@@ -16,7 +16,7 @@ from main.service.common import send_logistics_on_call_count_to_client
 def consume_fn(message_string):
     payload = json.loads(message_string)
     request_type = payload.get('request_type')
-    parts = request_type.split("_", maxsplit=2)
+    parts = request_type.split("_", maxsplit=1)
     domain, action = parts[0], parts[1]
     if domain == OndcDomain.RETAIL.value:
         if "_on_" not in request_type:

@@ -37,7 +37,7 @@ class GetNetworkRequestPayloads(Resource):
         return get_network_request_payloads(**args)
 
 
-@response_namespace.route("/v1/active-requests")
+@response_namespace.route("/v1/active-catalog-pull-requests")
 class GetNetworkRequestPayloads(Resource):
 
     def get(self):
