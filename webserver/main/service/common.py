@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 import requests
 
 from main.config import get_config_by_name
@@ -25,7 +27,10 @@ def get_responses_from_client(request_type, payload):
 def dump_request_payload(request_payload, domain, action=None):
     action = action if action else request_payload['context']['action']
     collection_name = get_mongo_collection(action)
-    is_successful = mongo.collection_insert_one(collection_name, request_payload)
+    filter_criteria = {"context.message_id": request_payload['context']['message_id']}
+    request_payload['created_at'] = datetime.utcnow()
+    update_data = {'$set': request_payload}
+    is_successful = mongo.collection_upsert_one(collection_name, filter_criteria, update_data)
     if is_successful:
         return get_ack_response(ack=True)
     else:
