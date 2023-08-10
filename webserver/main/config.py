@@ -48,7 +48,7 @@ class Config:
     PG_USER = os.getenv('PG_USER', 'postgres')
     PG_PASSWORD = os.getenv('PG_PASSWORD', 'postgres')
     TTL_IN_SECONDS = int(os.getenv("TTL_IN_SECONDS", "3600"))
-    VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "True") == "True"
+    VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "False") == "True"
 
 
 class DevelopmentConfig(Config):
