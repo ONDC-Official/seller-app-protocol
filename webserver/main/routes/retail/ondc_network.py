@@ -6,7 +6,7 @@ from main.models.ondc_request import OndcDomain
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
-from main.service.utils import validate_auth_header
+from main.utils.decorators import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
 
 retail_ondc_network_namespace = Namespace("retail_ondc_network", description="Retail ONDC Network Namespace")
