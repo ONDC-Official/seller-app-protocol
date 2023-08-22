@@ -18,14 +18,11 @@ def make_retail_payload_request_to_client(payload, request_type: OndcAction):
 
 
 @check_for_exception
-def send_retail_payload_to_client(message, request_type: OndcAction):
-    log(f"retail payload: {message}")
-    search_message_id = message['message_ids'][request_type.value]
-    search_collection = get_mongo_collection(request_type.value)
-    query_object = {"context.message_id": search_message_id}
-    search_payload = mongo.collection_find_one(search_collection, query_object)
-    resp, return_code = make_retail_payload_request_to_client(search_payload, request_type)
+def send_retail_payload_to_client(payload, request_type: OndcAction):
+    log(f"retail payload: {payload}")
+    resp, return_code = make_retail_payload_request_to_client(payload, request_type)
     log(f"Got response {resp} from client with status-code {return_code}")
+    return resp, return_code
 
 
 @check_for_exception
