@@ -32,6 +32,6 @@ def send_retail_response_to_ondc_network(message, request_type: OndcAction):
     collection = get_mongo_collection(request_type.value)
     query_object = {"context.message_id": message_id}
     request_payload = mongo.collection_find_one(collection, query_object)
-    gateway_or_bap_endpoint = fetch_gateway_url_from_lookup()
-    status_code = make_request_over_ondc_network(request_payload, gateway_or_bap_endpoint, request_type.value)
+    bap_endpoint = request_payload["context"]["bap_uri"]
+    status_code = make_request_over_ondc_network(request_payload, bap_endpoint, request_type.value)
     log(f"Sent responses to bg/bap with status-code {status_code}")
