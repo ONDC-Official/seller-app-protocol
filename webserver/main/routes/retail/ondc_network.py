@@ -20,7 +20,7 @@ class SearchRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "search")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -35,7 +35,7 @@ class SelectRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "select")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -50,7 +50,7 @@ class InitRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "init")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -65,7 +65,7 @@ class ConfirmRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "confirm")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -80,7 +80,7 @@ class CancelRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "cancel")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -95,7 +95,7 @@ class CancellationReasonsRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "cancellation_reasons")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -130,7 +130,7 @@ class RatingRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "rating")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -146,7 +146,7 @@ class StatusRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "status")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -162,7 +162,7 @@ class SupportRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "support")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -177,7 +177,7 @@ class TrackRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "track")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
@@ -192,7 +192,7 @@ class UpdateRequest(Resource):
     def post(self):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "update")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
