@@ -41,6 +41,7 @@ class OnSelectRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_select")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_select",
                 "message_ids": {
@@ -61,6 +62,7 @@ class OnInitRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_init")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_init",
                 "message_ids": {
@@ -81,6 +83,7 @@ class OnConfirmRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_confirm")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_confirm",
                 "message_ids": {
@@ -101,6 +104,7 @@ class OnCancelRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancel")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_cancel",
                 "message_ids": {
@@ -121,6 +125,7 @@ class OnCancellationReasonsRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_cancellation_reasons",
                 "message_ids": {
@@ -141,6 +146,7 @@ class OnIssueRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_issue",
                 "message_ids": {
@@ -161,6 +167,7 @@ class OnIssueStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_issue_status",
                 "message_ids": {
@@ -181,6 +188,7 @@ class OnRatingRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_rating")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_rating",
                 "message_ids": {
@@ -201,6 +209,7 @@ class OnStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_status")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_status",
                 "message_ids": {
@@ -221,6 +230,7 @@ class OnSupportRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_support")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_support",
                 "message_ids": {
@@ -241,6 +251,7 @@ class OnTrackRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_track")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_track",
                 "message_ids": {
@@ -261,6 +272,7 @@ class OnUpdateRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_update")
         if resp is None:
+            dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_on_update",
                 "message_ids": {
