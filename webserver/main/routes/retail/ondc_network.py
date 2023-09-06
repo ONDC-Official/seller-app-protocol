@@ -2,6 +2,7 @@ from flask import request
 from flask_restx import Namespace, Resource
 
 from main import constant
+from main.logger.custom_logging import log
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.repository.ack_response import get_ack_response
 from main.service import send_message_to_queue_for_given_request
@@ -19,12 +20,13 @@ class SearchRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
+        log(f"getting search request {request_payload}")
         resp = validate_payload_schema_based_on_version(request_payload, "search")
-        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload['context']['action'])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))
         else:
+            log(f"sending Nack for search request {request_payload}")
             return resp
 
 
