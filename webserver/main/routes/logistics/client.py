@@ -20,7 +20,7 @@ class SearchRequest(Resource):
         dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_search",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_search",
                 "message_ids": {
                     "search": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -39,7 +39,7 @@ class SelectRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "select")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_select",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_select",
                 "message_ids": {
                     "select": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -58,7 +58,7 @@ class InitRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "init")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_init",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_init",
                 "message_ids": {
                     "init": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -77,7 +77,7 @@ class ConfirmRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "confirm")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_confirm",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_confirm",
                 "message_ids": {
                     "confirm": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -96,7 +96,7 @@ class CancelRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "cancel")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_cancel",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_cancel",
                 "message_ids": {
                     "cancel": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -115,7 +115,7 @@ class CancellationReasonsRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "cancellation_reasons")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_cancellation_reasons",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_cancellation_reasons",
                 "message_ids": {
                     "cancellation_reasons": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -134,7 +134,7 @@ class IssueRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "issue")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_issue",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_issue",
                 "message_ids": {
                     "issue": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -153,7 +153,7 @@ class IssueStatusRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "issue_status")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_issue_status",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_issue_status",
                 "message_ids": {
                     "issue_status": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -191,7 +191,7 @@ class StatusRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "status")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_status",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_status",
                 "message_ids": {
                     "status": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -229,7 +229,7 @@ class TrackRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "track")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_track",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_track",
                 "message_ids": {
                     "track": request_payload[constant.CONTEXT]["message_id"]
                 }
@@ -248,7 +248,7 @@ class UpdateRequest(Resource):
         resp = validate_payload_schema_based_on_version(request_payload, "update")
         if resp is None:
             message = {
-                "request_type": f"{OndcDomain.RETAIL.value}_update",
+                "request_type": f"{OndcDomain.LOGISTICS.value}_update",
                 "message_ids": {
                     "update": request_payload[constant.CONTEXT]["message_id"]
                 }
