@@ -46,7 +46,7 @@ def get_network_request_payloads(**kwargs):
         message_ids = [x.strip() for x in v.split(",")]
         search_collection = get_mongo_collection(action)
         query_object = {"context.message_id": {"$in": message_ids}}
-        catalogs = mongo.collection_find_all(search_collection, query_object)
+        catalogs = mongo.collection_find_all(search_collection, query_object)["data"]
         response[k] = catalogs
     return response
 
