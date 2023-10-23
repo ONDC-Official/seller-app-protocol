@@ -18,7 +18,7 @@ class OnSearchRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_search")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_search", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -39,7 +39,7 @@ class OnSelectRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_select")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_select", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -60,7 +60,7 @@ class OnInitRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_init")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_init", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -81,7 +81,7 @@ class OnConfirmRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_confirm")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_confirm", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -102,7 +102,7 @@ class OnCancelRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_cancel")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_cancel", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -123,7 +123,7 @@ class OnCancellationReasonsRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -144,7 +144,7 @@ class OnIssueRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_issue")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_issue", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -165,7 +165,7 @@ class OnIssueStatusRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -186,7 +186,7 @@ class OnRatingRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_rating")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_rating", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -207,7 +207,7 @@ class OnStatusRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_status")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_status", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -228,7 +228,7 @@ class OnSupportRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_support")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_support", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -249,7 +249,7 @@ class OnTrackRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_track")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_track", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {
@@ -270,7 +270,7 @@ class OnUpdateRequest(Resource):
     @validate_auth_header
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "on_update")
+        resp = validate_payload_schema_based_on_version(request_payload, "on_update", domain="logistics")
         if resp is None:
             dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
             message = {

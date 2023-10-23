@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, validator, ValidationError
 
-from main.request_models.schema import Context, Catalog, Error, Order, Descriptor, Issue, Provider, Location, \
+from main.request_models.logistics.schema import Context, Catalog, Error, Order, Descriptor, Issue, Provider, Location, \
     Item, AddOn, Offer, Quotation, Billing, Fulfillment, Payment, Rating, Tracking, RatingAck
 
 

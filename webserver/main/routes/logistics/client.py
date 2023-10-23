@@ -16,7 +16,7 @@ class SearchRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "search")
+        resp = validate_payload_schema_based_on_version(request_payload, "search", domain="logistics")
         dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value)
         if resp is None:
             message = {
@@ -36,7 +36,7 @@ class SelectRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "select")
+        resp = validate_payload_schema_based_on_version(request_payload, "select", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_select",
@@ -55,7 +55,7 @@ class InitRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "init")
+        resp = validate_payload_schema_based_on_version(request_payload, "init", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_init",
@@ -74,7 +74,7 @@ class ConfirmRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "confirm")
+        resp = validate_payload_schema_based_on_version(request_payload, "confirm", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_confirm",
@@ -93,7 +93,7 @@ class CancelRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "cancel")
+        resp = validate_payload_schema_based_on_version(request_payload, "cancel", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_cancel",
@@ -112,7 +112,7 @@ class CancellationReasonsRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "cancellation_reasons")
+        resp = validate_payload_schema_based_on_version(request_payload, "cancellation_reasons", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_cancellation_reasons",
@@ -131,7 +131,7 @@ class IssueRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "issue")
+        resp = validate_payload_schema_based_on_version(request_payload, "issue", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_issue",
@@ -150,7 +150,7 @@ class IssueStatusRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "issue_status")
+        resp = validate_payload_schema_based_on_version(request_payload, "issue_status", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_issue_status",
@@ -169,7 +169,7 @@ class RatingRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "rating")
+        resp = validate_payload_schema_based_on_version(request_payload, "rating", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_rating",
@@ -188,7 +188,7 @@ class StatusRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "status")
+        resp = validate_payload_schema_based_on_version(request_payload, "status", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_status",
@@ -207,7 +207,7 @@ class SupportRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "support")
+        resp = validate_payload_schema_based_on_version(request_payload, "support", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.RETAIL.value}_support",
@@ -226,7 +226,7 @@ class TrackRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "track")
+        resp = validate_payload_schema_based_on_version(request_payload, "track", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_track",
@@ -245,7 +245,7 @@ class UpdateRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
-        resp = validate_payload_schema_based_on_version(request_payload, "update")
+        resp = validate_payload_schema_based_on_version(request_payload, "update", domain="logistics")
         if resp is None:
             message = {
                 "request_type": f"{OndcDomain.LOGISTICS.value}_update",
