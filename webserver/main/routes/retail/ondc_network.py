@@ -1,6 +1,7 @@
 from flask import request
 from flask_restx import Namespace, Resource
 
+from main import constant
 from main.logger.custom_logging import log
 from main.models.ondc_request import OndcDomain, OndcAction
 from main.service.common import dump_request_payload
@@ -19,6 +20,7 @@ class SearchRequest(Resource):
         request_payload = request.get_json()
         log(f"getting search request {request_payload}")
         resp = validate_payload_schema_based_on_version(request_payload, "search")
+        dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload[constant.CONTEXT]["action"])
         if resp is None:
             return send_retail_payload_to_client(request_payload,
                                                  request_type=OndcAction(request_payload['context']['action']))

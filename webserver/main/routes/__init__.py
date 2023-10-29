@@ -1,9 +1,12 @@
+import json
 import os
 
+from flask import request
 from flask_restx import Api as BaseAPI
 from jsonschema import ValidationError
 from werkzeug.exceptions import BadRequest
 
+from main import constant
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
 
@@ -41,8 +44,9 @@ api = Api(
 @api.errorhandler(BadRequest)
 def bad_request(error):
     if isinstance(error.description, ValidationError):
+        context = json.loads(request.data)[constant.CONTEXT]
         error_message = transform_json_schema_error(error.description)
-        return get_ack_response(ack=False,
+        return get_ack_response(context=context, ack=False,
                                 error={"type": BaseError.JSON_SCHEMA_ERROR.value, "message": error_message}), 400
     # handle other "Bad Request"-errors
     return str(error), 500

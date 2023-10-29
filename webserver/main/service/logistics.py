@@ -15,18 +15,14 @@ def make_logistics_request_payload_request_to_client(payload, retail_type: OndcA
 
 
 @check_for_exception
-def make_logistics_request(message, request_type: OndcAction):
-    log(f"logistics payload: {message}")
-    message_id = message['message_ids'][request_type.value]
-    collection = get_mongo_collection(request_type.value)
-    query_object = {"context.message_id": message_id}
-    request_payload = mongo.collection_find_one(collection, query_object)
+def make_logistics_request(request_payload, request_type: OndcAction):
     if request_payload['context']['action'] == "search":
         endpoint = fetch_gateway_url_from_lookup(domain=request_payload['context']['domain'])
     else:
         endpoint = request_payload['context']['bpp_uri']
-    status_code = make_request_over_ondc_network(request_payload, endpoint, request_type.value)
+    resp, status_code = make_request_over_ondc_network(request_payload, endpoint, request_type.value)
     log(f"Sent request to logistics-bg with status-code {status_code}")
+    return resp, status_code
 
 
 if __name__ == "__main__":

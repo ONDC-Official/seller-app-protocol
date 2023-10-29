@@ -32,9 +32,9 @@ def dump_request_payload(request_payload, domain, action=None):
     update_data = {'$set': request_payload}
     is_successful = mongo.collection_upsert_one(collection_name, filter_criteria, update_data)
     if is_successful:
-        return get_ack_response(ack=True)
+        return get_ack_response(context=request_payload['context'], ack=True)
     else:
-        return get_ack_response(ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
+        return get_ack_response(context=request_payload['context'], ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
 
 
 def get_network_request_payloads(**kwargs):
@@ -59,9 +59,8 @@ def get_active_ondc_requests():
 
 
 @check_for_exception
-def send_logistics_on_call_count_to_client(message, request_type="on_search"):
-    log(f"logistics {request_type} payload: {message}")
-    on_call_message_id = message['message_ids'][request_type]
+def send_logistics_on_call_count_to_client(request_payload, request_type="on_search"):
+    on_call_message_id = request_payload['context']['message_id']
     on_call_requests = get_ondc_requests(
         OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
     on_call_requests_count = len(on_call_requests)

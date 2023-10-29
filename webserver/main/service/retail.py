@@ -26,12 +26,9 @@ def send_retail_payload_to_client(payload, request_type: OndcAction):
 
 
 @check_for_exception
-def send_retail_response_to_ondc_network(message, request_type: OndcAction):
-    log(f"retail callback payload: {message}")
-    message_id = message['message_ids'][request_type.value]
-    collection = get_mongo_collection(request_type.value)
-    query_object = {"context.message_id": message_id}
-    request_payload = mongo.collection_find_one(collection, query_object)
+def send_retail_response_to_ondc_network(request_payload, request_type: OndcAction):
+    log(f"retail callback payload: {request_payload}")
     bap_endpoint = request_payload["context"]["bap_uri"]
-    status_code = make_request_over_ondc_network(request_payload, bap_endpoint, request_type.value)
+    resp, status_code = make_request_over_ondc_network(request_payload, bap_endpoint, request_type.value)
     log(f"Sent responses to bg/bap with status-code {status_code}")
+    return resp, status_code

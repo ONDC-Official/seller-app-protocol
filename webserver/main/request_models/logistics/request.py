@@ -126,153 +126,146 @@ class OnIssueStatusMessage(BaseModel):
 
 
 class SearchRequest(BaseModel):
-    context: Context
-    message: SearchMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class SelectRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class InitRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class ConfirmRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class StatusRequest(BaseModel):
-    context: Context
-    message: StatusMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class TrackRequest(BaseModel):
-    context: Context
-    message: TrackMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class CancelRequest(BaseModel):
-    context: Context
-    message: CancelMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class UpdateRequest(BaseModel):
-    context: Context
-    message: UpdateMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class RatingRequest(BaseModel):
-    context: Context
-    message: Rating
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class SupportRequest(BaseModel):
-    context: Context
-    message: SupportMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class IssueRequest(BaseModel):
-    context: Context
-    message: IssueMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class IssueStatusRequest(BaseModel):
-    context: Context
-    message: IssueStatusMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnSearchRequest(BaseModel):
-    context: Context
-    message: OnSearchMessage
+    context: dict
+    message: dict
     error: Optional[Error]
-
-    @validator("message")
-    def validate_value(cls, v, values):
-        """Validate each item"""
-        if v.catalog is None:
-            raise ValidationError("Catalog is missing!")
-        return v
 
 
 class OnSelectRequest(BaseModel):
-    context: Context
-    message: OnSelectMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnInitRequest(BaseModel):
-    context: Context
-    message: OnInitMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnConfirmRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnStatusRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnTrackRequest(BaseModel):
-    context: Context
-    message: OnTrackMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnCancelRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnUpdateRequest(BaseModel):
-    context: Context
-    message: OrderMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnRatingRequest(BaseModel):
-    context: Context
-    message: RatingAck
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnSupportRequest(BaseModel):
-    context: Context
-    message: OnSupportMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnIssueRequest(BaseModel):
-    context: Context
-    message: OnIssueMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 
 class OnIssueStatusRequest(BaseModel):
-    context: Context
-    message: OnIssueStatusMessage
+    context: dict
+    message: dict
     error: Optional[Error]
 
 

@@ -1,8 +1,9 @@
 from flask import request
 from flask_restx import Namespace, Resource
 
-from main.models.ondc_request import OndcAction
-from main.service.common import send_logistics_on_call_count_to_client
+from main import constant
+from main.models.ondc_request import OndcDomain
+from main.service.common import dump_request_payload
 from main.utils.decorators import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
 
@@ -17,8 +18,7 @@ class OnSearchRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_search", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -31,8 +31,7 @@ class OnSelectRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_select", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -45,8 +44,7 @@ class OnInitRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_init", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -59,8 +57,7 @@ class OnConfirmRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_confirm", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -73,8 +70,7 @@ class OnCancelRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancel", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -87,8 +83,7 @@ class OnCancellationReasonsRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -101,8 +96,7 @@ class OnIssueRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -115,8 +109,7 @@ class OnIssueStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -129,8 +122,7 @@ class OnRatingRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_rating", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -143,8 +135,7 @@ class OnStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_status", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -157,8 +148,7 @@ class OnSupportRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_support", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -171,8 +161,7 @@ class OnTrackRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_track", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
 
@@ -185,7 +174,6 @@ class OnUpdateRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_update", domain="logistics")
         if resp is None:
-            action = request_payload["context"]["action"]
-            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
+            return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
