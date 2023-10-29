@@ -1,11 +1,8 @@
 from flask import request
 from flask_restx import Namespace, Resource
 
-from main import constant
 from main.logger.custom_logging import log
 from main.models.ondc_request import OndcDomain, OndcAction
-from main.repository.ack_response import get_ack_response
-from main.service import send_message_to_queue_for_given_request
 from main.service.common import dump_request_payload
 from main.service.retail import send_retail_payload_to_client
 from main.utils.decorators import validate_auth_header

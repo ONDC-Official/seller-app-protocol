@@ -1,11 +1,8 @@
 from flask import request
 from flask_restx import Namespace, Resource
 
-from main import constant
-from main.models.ondc_request import OndcDomain
-from main.repository.ack_response import get_ack_response
-from main.service import send_message_to_queue_for_given_request
-from main.service.common import dump_request_payload
+from main.models.ondc_request import OndcAction
+from main.service.common import send_logistics_on_call_count_to_client
 from main.utils.decorators import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
 
@@ -20,15 +17,8 @@ class OnSearchRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_search", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_search",
-                "message_ids": {
-                    "on_search": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -41,15 +31,8 @@ class OnSelectRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_select", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_select",
-                "message_ids": {
-                    "on_select": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -62,15 +45,8 @@ class OnInitRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_init", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_init",
-                "message_ids": {
-                    "on_init": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -83,15 +59,8 @@ class OnConfirmRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_confirm", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_confirm",
-                "message_ids": {
-                    "on_confirm": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -104,15 +73,8 @@ class OnCancelRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancel", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_cancel",
-                "message_ids": {
-                    "on_cancel": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -125,15 +87,8 @@ class OnCancellationReasonsRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_cancellation_reasons", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_cancellation_reasons",
-                "message_ids": {
-                    "on_cancellation_reasons": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -146,15 +101,8 @@ class OnIssueRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_issue",
-                "message_ids": {
-                    "on_issue": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -167,15 +115,8 @@ class OnIssueStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_issue_status", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_issue_status",
-                "message_ids": {
-                    "on_issue_status": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -188,15 +129,8 @@ class OnRatingRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_rating", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_rating",
-                "message_ids": {
-                    "on_rating": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -209,15 +143,8 @@ class OnStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_status", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_status",
-                "message_ids": {
-                    "on_status": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -230,15 +157,8 @@ class OnSupportRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_support", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_support",
-                "message_ids": {
-                    "on_support": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -251,15 +171,8 @@ class OnTrackRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_track", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_track",
-                "message_ids": {
-                    "on_track": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
 
@@ -272,14 +185,7 @@ class OnUpdateRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_update", domain="logistics")
         if resp is None:
-            dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
-            message = {
-                "request_type": f"{OndcDomain.LOGISTICS.value}_on_update",
-                "message_ids": {
-                    "on_update": request_payload[constant.CONTEXT]["message_id"]
-                }
-            }
-            send_message_to_queue_for_given_request(message)
-            return get_ack_response(request_payload[constant.CONTEXT], ack=True)
+            action = request_payload["context"]["action"]
+            return send_logistics_on_call_count_to_client(request_payload, request_type=OndcAction(action))
         else:
             return resp
