@@ -6,6 +6,7 @@ from main.models.ondc_request import OndcDomain
 from main.service.common import dump_request_payload
 from main.utils.decorators import validate_auth_header
 from main.utils.validation import validate_payload_schema_based_on_version
+from main.logger.custom_logging import log
 
 logistics_ondc_network_namespace = Namespace("logistics_ondc_network", description="Logistics ONDC Network Namespace")
 
@@ -18,6 +19,7 @@ class OnSearchRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(request_payload, "on_search", domain="logistics")
         if resp is None:
+            log(f"On search request here is {request_payload['context']}")
             return dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value, action=request_payload[constant.CONTEXT]["action"])
         else:
             return resp
