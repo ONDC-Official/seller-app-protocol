@@ -61,7 +61,8 @@ def create_authorisation_header(request_body, created=None, expires=None):
     expires = int((datetime.datetime.now() + datetime.timedelta(hours=1)).timestamp()) if expires is None else expires
     signing_key = create_signing_string(hash_message(json.dumps(request_body, separators=(',', ':'))),
                                         created=created, expires=expires)
-    signature = sign_response(signing_key, private_key=get_config_by_name("BPP_PRIVATE_KEY"))
+    bpp_private_key = get_config_by_name("BPP_PRIVATE_KEY")
+    signature = sign_response(signing_key, private_key=bpp_private_key)
 
     subscriber_id = get_config_by_name("BPP_ID")
     unique_key_id = get_config_by_name("BPP_UNIQUE_KEY_ID")
@@ -99,16 +100,19 @@ def sign_registry_request(request):
     return sign_response(signing_string, private_key=get_config_by_name("BPP_PRIVATE_KEY"))
 
 
-def format_registry_request(request):
+def format_registry_request(request, vlookup=False):
     request['type'] = "gateway"
-    signature = sign_registry_request(request)
-    return {
-        "sender_subscriber_id": get_config_by_name("BPP_ID"),
-        "request_id": str(uuid.uuid4()),
-        "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+"Z",
-        "search_parameters": request,
-        "signature": signature
-    }
+    if vlookup:
+        signature = sign_registry_request(request)
+        return {
+            "sender_subscriber_id": get_config_by_name("BPP_ID"),
+            "request_id": str(uuid.uuid4()),
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+"Z",
+            "search_parameters": request,
+            "signature": signature
+        }
+    else:
+        return request
 
 
 if __name__ == '__main__':
