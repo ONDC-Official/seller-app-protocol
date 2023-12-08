@@ -1,34 +1,18 @@
 import json
+from datetime import datetime
+
 import requests
 
 from main.config import get_config_by_name
 from main.logger.custom_logging import log
+from main.models import get_mongo_collection
 from main.models.error import DatabaseError
-from main.models.ondc_request import OndcDomain, OndcAction
+from main.models.ondc_request import OndcDomain, OndcAction, OndcRequest
+from main.repository import mongo
 from main.repository.ack_response import get_ack_response
-from main.repository.db import add_ondc_request, get_first_ondc_request, get_ondc_requests
-from main.service.utils import make_request_over_ondc_network
+from main.repository.db import get_ondc_requests
 from main.utils.decorators import check_for_exception
-from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 from main.utils.webhook_utils import post_count_response_to_client
-
-
-@check_for_exception
-def send_bpp_responses_to_bg_or_bpp(message):
-    log(f"{message['request_type']} payload: {message}")
-    action = message['request_type'].split("_")[-1]
-    message_id = message['message_ids'][action]
-    payload = get_first_ondc_request(
-        OndcDomain.RETAIL, OndcAction(action), message_id)
-    client_responses, _ = get_responses_from_client(action, payload)
-
-    gateway_or_bap_endpoint = fetch_gateway_url_from_lookup() if action == "search" else \
-        payload['context']['bap_uri']
-    status_code = make_request_over_ondc_network(client_responses, gateway_or_bap_endpoint,
-                                                 client_responses['context']['action'])
-    # status_code = requests.post(f"https://webhook.site/895b3178-368d-4347-9cb6-a4512a1dd73e/{request_type}",
-    #                             json=payload, headers={'Authorization': auth_header})
-    log(f"Sent responses to bg/bap with status-code {status_code}")
 
 
 def get_responses_from_client(request_type, payload):
@@ -41,14 +25,18 @@ def get_responses_from_client(request_type, payload):
 
 
 def dump_request_payload(request_payload, domain, action=None):
-    message_id = request_payload['context']['message_id']
     action = action if action else request_payload['context']['action']
-    is_successful = add_ondc_request(domain=OndcDomain(domain), action=OndcAction(action), message_id=message_id,
-                                     request=request_payload)
+    collection_name = get_mongo_collection(action)
+    filter_criteria = {"context.message_id": request_payload['context']['message_id']}
+    if domain == OndcDomain.LOGISTICS:
+        filter_criteria["context.bpp_id"] = request_payload['context']['bpp_id']
+    request_payload['created_at'] = datetime.utcnow()
+    update_data = {'$set': request_payload}
+    is_successful = mongo.collection_upsert_one(collection_name, filter_criteria, update_data)
     if is_successful:
-        return get_ack_response(ack=True)
+        return get_ack_response(context=request_payload['context'], ack=True)
     else:
-        return get_ack_response(ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
+        return get_ack_response(context=request_payload['context'], ack=False, error=DatabaseError.ON_WRITE_ERROR.value)
 
 
 def get_network_request_payloads(**kwargs):
@@ -58,18 +46,23 @@ def get_network_request_payloads(**kwargs):
         key_parts = k.split("_", maxsplit=1)
         domain, action = key_parts[0], key_parts[1]
         message_ids = [x.strip() for x in v.split(",")]
-        ondc_requests = []
-        for m in message_ids:
-            ondc_requests.extend(get_ondc_requests(
-                OndcDomain(domain), OndcAction(action), m))
-        response[k] = ondc_requests
+        search_collection = get_mongo_collection(action)
+        query_object = {"context.message_id": {"$in": message_ids}}
+        catalogs = mongo.collection_find_all(search_collection, query_object)["data"]
+        response[k] = catalogs
     return response
 
 
+def get_active_ondc_requests():
+    search_collection = get_mongo_collection("search")
+    query_object = {"message.intent.tags.code": "catalog_inc"}
+    catalogs = mongo.collection_find_all(search_collection, query_object)
+    return catalogs
+
+
 @check_for_exception
-def send_logistics_on_call_count_to_client(message, request_type="on_search"):
-    log(f"logistics {request_type} payload: {message}")
-    on_call_message_id = message['message_ids'][request_type]
+def send_logistics_on_call_count_to_client(request_payload, request_type="on_search"):
+    on_call_message_id = request_payload['context']['message_id']
     on_call_requests = get_ondc_requests(
         OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
     on_call_requests_count = len(on_call_requests)

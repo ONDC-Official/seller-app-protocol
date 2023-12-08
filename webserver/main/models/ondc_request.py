@@ -3,9 +3,6 @@ import enum
 from main.models.init_database import dbBase
 from sqlalchemy import Column, Integer, String, DateTime, Enum, Float, JSON
 
-collection_names = ["on_search_items", "on_select", "on_init", "on_confirm", "on_cancel", "on_issue", "on_status", "on_support",
-                    "on_track", "on_update", "on_issue_status"]
-
 
 class OndcAction(enum.Enum):
     SEARCH = "search"

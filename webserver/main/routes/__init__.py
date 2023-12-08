@@ -1,36 +1,21 @@
+import json
 import os
 
+from flask import request
 from flask_restx import Api as BaseAPI
 from jsonschema import ValidationError
 from werkzeug.exceptions import BadRequest
 
+from main import constant
 from main.models.error import BaseError
 from main.repository.ack_response import get_ack_response
-from main.routes.logistics.update import logistics_update_namespace
-from main.routes.retail.cancel import cancel_namespace
-from main.routes.retail.cancellation_reasons import cancellation_reasons_namespace
-from main.routes.retail.confirm import confirm_namespace
-from main.routes.retail.init import init_namespace
-from main.routes.logistics.cancel import logistics_cancel_namespace
-from main.routes.logistics.confirm import logistics_confirm_namespace
-from main.routes.logistics.init import logistics_init_namespace
-from main.routes.logistics.status import logistics_status_namespace
-from main.routes.logistics.support import logistics_support_namespace
-from main.routes.logistics.track import logistics_track_namespace
-from main.routes.retail.rating import rating_namespace
+
+from main.routes.logistics.client import logistics_client_namespace
+from main.routes.logistics.ondc_network import logistics_ondc_network_namespace
 from main.routes.response import response_namespace
-from main.routes.retail.search import search_namespace
-from main.routes.logistics.search import logistics_search_namespace
-from main.routes.retail.select import select_namespace
-from main.routes.retail.status import status_namespace
-from main.routes.retail.support import support_namespace
-from main.routes.retail.track import track_namespace
-from main.routes.retail.update import update_namespace
+from main.routes.retail.ondc_network import retail_ondc_network_namespace
+from main.routes.retail.client import retail_client_namespace
 from main.utils.schema_utils import transform_json_schema_error
-from main.routes.retail.issue import issue_namespace
-from main.routes.logistics.issue import logistics_issue_namespace
-from main.routes.retail.issue_status import issue_status_namespace
-from main.routes.logistics.issue_status import logistics_issue_status_namespace
 
 
 class Api(BaseAPI):
@@ -59,9 +44,9 @@ api = Api(
 @api.errorhandler(BadRequest)
 def bad_request(error):
     if isinstance(error.description, ValidationError):
-        # log(f"data: {request.get_json()} \n error: {error.description}")
+        context = json.loads(request.data)[constant.CONTEXT]
         error_message = transform_json_schema_error(error.description)
-        return get_ack_response(ack=False,
+        return get_ack_response(context=context, ack=False,
                                 error={"type": BaseError.JSON_SCHEMA_ERROR.value, "message": error_message}), 400
     # handle other "Bad Request"-errors
     return str(error), 500
@@ -72,27 +57,8 @@ def bad_request(error):
     return {'error': str(error), 'message': error.message}, 400
 
 
-api.add_namespace(cancel_namespace, path='/protocol')
-api.add_namespace(cancellation_reasons_namespace, path='/protocol')
-api.add_namespace(confirm_namespace, path='/protocol')
-api.add_namespace(init_namespace, path='/protocol')
-api.add_namespace(rating_namespace, path='/protocol')
-api.add_namespace(search_namespace, path='/protocol')
-api.add_namespace(select_namespace, path='/protocol')
-api.add_namespace(status_namespace, path='/protocol')
-api.add_namespace(support_namespace, path='/protocol')
-api.add_namespace(track_namespace, path='/protocol')
-api.add_namespace(update_namespace, path='/protocol')
-api.add_namespace(issue_namespace, path='/protocol')
-api.add_namespace(issue_status_namespace, path='/protocol')
-api.add_namespace(logistics_search_namespace, path='/protocol')
-api.add_namespace(logistics_init_namespace, path='/protocol')
-api.add_namespace(logistics_confirm_namespace, path='/protocol')
-api.add_namespace(logistics_track_namespace, path='/protocol')
-api.add_namespace(logistics_status_namespace, path='/protocol')
-api.add_namespace(logistics_support_namespace, path='/protocol')
-api.add_namespace(logistics_cancel_namespace, path='/protocol')
-api.add_namespace(logistics_update_namespace, path='/protocol')
-api.add_namespace(logistics_issue_namespace, path='/protocol')
-api.add_namespace(logistics_issue_status_namespace, path='/protocol')
 api.add_namespace(response_namespace, path='/protocol')
+api.add_namespace(retail_ondc_network_namespace, path='/protocol')
+api.add_namespace(retail_client_namespace, path='/protocol')
+api.add_namespace(logistics_ondc_network_namespace, path='/protocol/logistics')
+api.add_namespace(logistics_client_namespace, path='/protocol/logistics')
