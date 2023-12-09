@@ -1,6 +1,7 @@
 import os
 
 from main.config import get_config_by_name
+from main.logger.custom_logging import log_error
 from main.utils.cryptic_utils import get_filter_dictionary_or_operation, format_registry_request
 from main.utils.webhook_utils import lookup_call
 
@@ -29,13 +30,12 @@ def fetch_gateway_url_from_lookup(domain=None):
 
 def get_sender_public_key_from_header(auth_header, domain):
     header_parts = get_filter_dictionary_or_operation(auth_header.replace("Signature ", ""))
+    subscriber_id = header_parts['keyId'].split("|")[0]
     payload = {"country": get_config_by_name("COUNTRY_CODE"), "domain": domain,
-               "subscriber_id": header_parts['keyId'].split("|")[0]}
+               "subscriber_id": subscriber_id}
     response, status_code = lookup_call(f"{get_config_by_name('REGISTRY_BASE_URL')}/lookup", payload=payload)
-    if status_code == 200:
+    if status_code == 200 and len(response) > 0:
         return response[0]['signing_public_key']
     else:
+        log_error(f"Didn't get public key for {subscriber_id} for {domain}")
         return None
-
-
-# BPP_PRIVATE_KEY=SHwCJJJoMwrCOmA83ftKBII2YvNB/IJOcAUY3P6Mro4E5Rnks1873hvTn63B4vMTHr9lH+Ia3BMW9b/cE5gh0w==;BPP_PUBLIC_KEY=BOUZ5LNfO94b05+tweLzEx6/ZR/iGtwTFvW/3BOYIdM=;BPP_ID=ref-app-seller-staging-v2.ondc.org;BPP_UNIQUE_KEY_ID=280f8e2a-6f6f-4cb0-868a-2157014f43f5;BPP_URI=https://ref-app-seller-staging-v2.ondc.org
