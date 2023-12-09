@@ -16,7 +16,7 @@ from main.config import get_config_by_name
 from main.logger.custom_logging import log_error
 from main.repository.ack_response import get_ack_response
 from main.utils.cryptic_utils import verify_authorisation_header
-from main.utils.lookup_utils import get_bap_public_key_from_header
+from main.utils.lookup_utils import get_sender_public_key_from_header
 
 
 def check_for_exception(func):
@@ -38,7 +38,7 @@ def validate_auth_header(func):
             auth_header = request.headers.get('Authorization')
             domain = request.get_json().get("context", {}).get("domain")
             if auth_header and verify_authorisation_header(auth_header, request.data.decode("utf-8"),
-                                                           public_key=get_bap_public_key_from_header(auth_header, domain)):
+                                                           public_key=get_sender_public_key_from_header(auth_header, domain)):
                 return func(*args, **kwargs)
             context = json.loads(request.data)[constant.CONTEXT]
             return get_ack_response(context=context, ack=False, error={

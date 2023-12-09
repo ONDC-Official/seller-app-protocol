@@ -27,10 +27,9 @@ def fetch_gateway_url_from_lookup(domain=None):
             return None
 
 
-def get_bap_public_key_from_header(auth_header, domain):
+def get_sender_public_key_from_header(auth_header, domain):
     header_parts = get_filter_dictionary_or_operation(auth_header.replace("Signature ", ""))
-    subscriber_type = "BAP"
-    payload = {"type": subscriber_type, "domain": domain,
+    payload = {"country": get_config_by_name("COUNTRY_CODE"), "domain": domain,
                "subscriber_id": header_parts['keyId'].split("|")[0]}
     response, status_code = lookup_call(f"{get_config_by_name('REGISTRY_BASE_URL')}/lookup", payload=payload)
     if status_code == 200:
