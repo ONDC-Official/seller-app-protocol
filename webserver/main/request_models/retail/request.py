@@ -85,7 +85,7 @@ class OnInitOrder(BaseModel):
     offers: Optional[List[Offer]]
     quote: Optional[Quotation]
     billing: Optional[Billing]
-    fulfillment: Optional[Fulfillment]
+    fulfillment: Optional[dict]
     payment: Optional[Payment]
 
 
@@ -169,7 +169,7 @@ class CancelRequest(BaseModel):
 
 class UpdateRequest(BaseModel):
     context: Context
-    message: UpdateMessage
+    message: dict
     error: Optional[Error]
 
 
@@ -230,7 +230,7 @@ class OnConfirmRequest(BaseModel):
 
 class OnStatusRequest(BaseModel):
     context: Context
-    message: OrderMessage
+    message: dict
     error: Optional[Error]
 
 
@@ -248,7 +248,7 @@ class OnCancelRequest(BaseModel):
 
 class OnUpdateRequest(BaseModel):
     context: Context
-    message: OrderMessage
+    message: dict
     error: Optional[Error]
 
 
