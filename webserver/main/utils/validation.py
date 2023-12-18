@@ -14,13 +14,16 @@ from main.request_models.logistics import request as logistics_request
 from main.utils.schema_utils import get_json_schema_for_given_path, transform_json_schema_error
 
 
-def validate_payload_schema_based_on_version(request_payload, request_type, domain="retail"):
-    if request_payload[constant.CONTEXT]["core_version"] != "1.2.0":
-        log("Validating schema via json-schema")
+def validate_payload_schema_based_on_version(request_payload, request_type, domain: str = "retail"):
+    # Issue action's core version should be 1.0.0
+    if request_payload[constant.CONTEXT]["core_version"] == "1.0.0":
+        if request_type == "issue" or request_type == "on_issue" or request_type == "issue_status":
+            return validate_payload_schema_using_pydantic_classes(request_payload, request_type, domain)
         return validate_payload_schema_using_json_schema(request_payload, request_type)
-    else:
-        log("Validating schema via pydantic classes")
+    # Rest of the action methods should have 1.2.0
+    elif request_payload[constant.CONTEXT]["core_version"] == "1.2.0":
         return validate_payload_schema_using_pydantic_classes(request_payload, request_type, domain)
+    return validate_payload_schema_using_json_schema(request_payload, request_type)
 
 
 def validate_payload_schema_using_json_schema(request_payload, request_type):
@@ -36,12 +39,14 @@ def validate_payload_schema_using_json_schema(request_payload, request_type):
                                        "message": error_message}), 400
 
 
-def validate_payload_schema_using_pydantic_classes(request_payload, request_type, domain="retail"):
+def validate_payload_schema_using_pydantic_classes(request_payload, request_type, domain: str = "retail"):
     try:
         if domain == "retail":
-            retail_request.request_type_to_class_mapping[request_type](**request_payload)
+            retail_request.request_type_to_class_mapping[request_type](
+                **request_payload)
         else:
-            logistics_request.request_type_to_class_mapping[request_type](**request_payload)
+            logistics_request.request_type_to_class_mapping[request_type](
+                **request_payload)
         return None
     except pydantic.ValidationError as e:
         error_message = str(e)
