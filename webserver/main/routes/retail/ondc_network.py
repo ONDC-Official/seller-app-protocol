@@ -125,12 +125,12 @@ class IssueRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(
             request_payload, "issue")
-        if resp is not None:
-            return resp
         dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value,
                              action=request_payload['context']['action'])
-        return send_retail_payload_to_client(request_payload,
-                                             request_type=OndcAction(request_payload['context']['action']))
+        if resp is None:
+            return send_retail_payload_to_client(request_payload,
+                                                 request_type=OndcAction(request_payload['context']['action']))
+        return resp
 
 
 @retail_ondc_network_namespace.route("/v1/issue_status")
@@ -141,12 +141,12 @@ class IssueStatusRequest(Resource):
         request_payload = request.get_json()
         resp = validate_payload_schema_based_on_version(
             request_payload, "issue_status")
-        if resp is not None:
-            return resp
         dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value,
                              action=request_payload['context']['action'])
-        return send_retail_payload_to_client(request_payload,
-                                             request_type=OndcAction(request_payload['context']['action']))
+        if resp is None:
+            return send_retail_payload_to_client(request_payload,
+                                                 request_type=OndcAction(request_payload['context']['action']))
+        return resp
 
 
 @retail_ondc_network_namespace.route("/v1/rating")
