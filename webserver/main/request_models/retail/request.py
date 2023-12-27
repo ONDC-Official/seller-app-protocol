@@ -57,7 +57,7 @@ class IssueMessage(BaseModel):
 
 
 class IssueStatusMessage(BaseModel):
-    id: UUID
+    issue_id: UUID
 
 
 class OnSearchMessage(BaseModel):
