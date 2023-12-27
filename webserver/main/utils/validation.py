@@ -17,7 +17,7 @@ from main.utils.schema_utils import get_json_schema_for_given_path, transform_js
 def validate_payload_schema_based_on_version(request_payload, request_type, domain: str = "retail"):
     # Issue action's core version should be 1.0.0
     if request_payload[constant.CONTEXT]["core_version"] == "1.0.0":
-        if "issue" in request_type.value:
+        if "issue" in request_type:
             return validate_payload_schema_using_pydantic_classes(request_payload, request_type, domain)
         return validate_payload_schema_using_json_schema(request_payload, request_type)
     # Rest of the action methods should have 1.2.0
@@ -50,6 +50,7 @@ def validate_payload_schema_using_pydantic_classes(request_payload, request_type
         return None
     except pydantic.ValidationError as e:
         error_message = str(e)
+        log(e)
         context = json.loads(request.data)[constant.CONTEXT]
         return get_ack_response(context=context, ack=False,
                                 error={"type": BaseError.JSON_SCHEMA_ERROR.value, "code": "20000",
