@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, reqparse
 
-from main.service.common import get_network_request_payloads
+from main.service.common import get_network_request_payloads, get_active_ondc_requests
 
 response_namespace = Namespace('response', description='Response Namespace')
 
@@ -36,3 +36,9 @@ class GetNetworkRequestPayloads(Resource):
         args = self.create_parser_with_args()
         return get_network_request_payloads(**args)
 
+
+@response_namespace.route("/v1/active-catalog-pull-requests")
+class GetNetworkRequestPayloads(Resource):
+
+    def get(self):
+        return get_active_ondc_requests()

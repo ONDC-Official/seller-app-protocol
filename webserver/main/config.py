@@ -39,7 +39,7 @@ class Config:
     BPP_CLIENT_ENDPOINT = os.getenv("BPP_CLIENT_ENDPOINT", "client")
     IGM_CLIENT_ENDPOINT = os.getenv(
         "IGM_CLIENT_ENDPOINT", "http://seller-app-igm:8000/api")
-    BG_DEFAULT_URL = os.getenv("BG_DEFAULT_URL", "https://pilot-gateway-1.beckn.nsdl.co.in/")
+    BG_DEFAULT_URL = os.getenv("BG_DEFAULT_URL", "https://staging.registry.ondc.org")
     BG_DEFAULT_URL_FLAG = os.getenv("BG_DEFAULT_URL_FLAG", "True") == "True"
     LOGISTICS_ON_SEARCH_WAIT = int(os.getenv("LOGISTICS_ON_SEARCH_WAIT", "3"))
     PG_HOST = os.getenv('PG_HOST', 'localhost')
@@ -47,13 +47,15 @@ class Config:
     PG_DATABASE = os.getenv('PG_DATABASE', 'practice')
     PG_USER = os.getenv('PG_USER', 'postgres')
     PG_PASSWORD = os.getenv('PG_PASSWORD', 'postgres')
+    TTL_IN_SECONDS = int(os.getenv("TTL_IN_SECONDS", "3600"))
+    VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "False") == "True"
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     ENV = True
     RABBITMQ_HOST = "localhost"
-    REGISTRY_BASE_URL = "https://pilot-gateway-1.beckn.nsdl.co.in"
+    REGISTRY_BASE_URL = "https://staging.registry.ondc.org"
     MONGO_DATABASE_HOST = "localhost"
     MONGO_DATABASE_PORT = 27017
     MONGO_DATABASE_NAME = "sandbox_bpp"
@@ -62,7 +64,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     RABBITMQ_HOST = "rabbitmq"
-    REGISTRY_BASE_URL = "https://pilot-gateway-1.beckn.nsdl.co.in"
+    REGISTRY_BASE_URL = "https://staging.registry.ondc.org"
     MONGO_DATABASE_HOST = os.getenv("MONGO_DATABASE_HOST", "mongo")
     MONGO_DATABASE_PORT = int(os.getenv("MONGO_DATABASE_PORT", 27017))
     MONGO_DATABASE_NAME = os.getenv("MONGO_DATABASE_NAME", "sandbox_bpp")
