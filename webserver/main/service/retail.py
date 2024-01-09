@@ -19,9 +19,15 @@ def make_retail_payload_request_to_client(payload, request_type: OndcAction):
         return get_responses_from_client(f"v2/client/{request_type.value}", payload)
 
 
+def send_retail_payload_to_client_logistics(payload, request_type: OndcAction):
+    log(f"retail payload to logistics internal client: {payload}")
+    if payload[constant.CONTEXT]["core_version"] == "1.0.0" and "issue" in request_type.value:
+        return get_responses_from_client(f"logistics/{request_type.value}", payload)
+
+
 @check_for_exception
 def send_retail_payload_to_client(payload, request_type: OndcAction):
-    log(f"retail payload: {payload}")
+    log(f"retail payload to internal client: {payload}")
     resp, return_code = make_retail_payload_request_to_client(
         payload, request_type)
     log(f"Got response {resp} from client with status-code {return_code}")
