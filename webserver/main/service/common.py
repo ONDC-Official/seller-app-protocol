@@ -28,7 +28,7 @@ def dump_request_payload(request_payload, domain, action=None):
     action = action if action else request_payload['context']['action']
     collection_name = get_mongo_collection(action)
     filter_criteria = {"context.message_id": request_payload['context']['message_id']}
-    if domain == OndcDomain.LOGISTICS:
+    if domain == OndcDomain.LOGISTICS.value:
         filter_criteria["context.bpp_id"] = request_payload['context']['bpp_id']
     request_payload['created_at'] = datetime.utcnow()
     update_data = {'$set': request_payload}
