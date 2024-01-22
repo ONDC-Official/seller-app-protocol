@@ -130,6 +130,8 @@ class Domain(Enum):
     ONDC_RET17 = 'ONDC:RET17'
     ONDC_RET18 = 'ONDC:RET18'
     ONDC_RET19 = 'ONDC:RET19'
+    ONDC_RET20 = 'ONDC:RET20'
+    ONDC_AGR10 = 'ONDC:AGR10'
     ONDC_MOB = 'ONDC:MOB'
     ONDC_LOG = 'ONDC:LOG'
 
@@ -192,6 +194,9 @@ class Type2(Enum):
     Delivery = 'Delivery'
     Delivery_and_Self_Pickup = 'Delivery and Self-Pickup'
     Reverse_QC = 'Reverse QC'
+    Cancel = 'Cancel'
+    Return = 'Return'
+    RTO = 'RTO'
 
 
 class Gps(BaseModel):
@@ -550,6 +555,16 @@ class Tags(BaseModel):
     )
 
 
+class TagChild(BaseModel):
+    code: str
+    value: str
+
+
+class Tag(BaseModel):
+    code: str
+    list: List[TagChild]
+
+
 class Range1(BaseModel):
     start: Optional[datetime] = None
     end: Optional[datetime] = None
@@ -691,6 +706,7 @@ class IssueSubCategory(Enum):
     ITM02 = 'ITM02'
     ITM03 = 'ITM03'
     ITM04 = 'ITM04'
+    ITM05 = 'ITM05'
     FLM01 = 'FLM01'
     FLM02 = 'FLM02'
     FLM03 = 'FLM03'
@@ -698,6 +714,7 @@ class IssueSubCategory(Enum):
     FLM05 = 'FLM05'
     FLM06 = 'FLM06'
     FLM07 = 'FLM07'
+    FLM08 = 'FLM08'
     AGT01 = 'AGT01'
     AGT02 = 'AGT02'
     PMT01 = 'PMT01'
@@ -987,6 +1004,10 @@ class Descriptor(BaseModel):
     field_3d_render: Optional[AnyUrl] = Field(None, alias='3d_render')
 
 
+class Descriptor2(Descriptor):
+    images: List[Image]
+
+
 class Dimensions(BaseModel):
     length: Optional[Scalar] = None
     breadth: Optional[Scalar] = None
@@ -1036,7 +1057,6 @@ class ItemQuantity(BaseModel):
     minimum: Optional[Minimum] = None
     selected: Optional[Selected] = None
 
-
 class Item(BaseModel):
     id: Union[str, int] = Field(
         ...,
@@ -1046,6 +1066,7 @@ class Item(BaseModel):
     descriptor: Optional[Descriptor] = None
     price: Optional[Price] = None
     category_id: Optional[IdModel] = None
+    category_ids: Optional[List[constr(regex=r'^\w+:\d+$')]] = []
     fulfillment_id: Optional[IdModel2] = None
     rating: Optional[ValueModel] = None
     location_id: Optional[IdModel4] = None
@@ -1094,7 +1115,7 @@ class Item(BaseModel):
         alias='./ondc-statutory_reqs_prepackaged_food',
         description='<br> mandatory attributes include the following<br> ingredients_info<br> nutritional_info<br> additives_info<br> net_quantity<br> contact_details_consumer_care<br>',
     )
-    tags: Optional[Tags] = None
+    tags: List[Tag] = []
 
 
 class Location(BaseModel):
@@ -1131,7 +1152,7 @@ class Location1(BaseModel):
 
 class Provider1(BaseModel):
     id: Optional[IdModel5] = None
-    locations: Optional[List[Location1]] = Field(None, max_items=1)
+    locations: Optional[List[Location1]] = Field(None)
 
 
 class Item1(BaseModel):
@@ -1237,6 +1258,12 @@ class Location2(Location):
 
 class Item2(Item):
     quantity: Optional[ItemQuantity] = None
+    tags: List[Tag]
+
+
+class OnSearchItem(Item):
+    quantity: ItemQuantity
+    tags: List[Tag]
 
 
 class State(BaseModel):
@@ -1431,11 +1458,11 @@ class Cancellation(BaseModel):
 
 
 class Category(BaseModel):
-    id: Optional[Union[str, int]] = Field(None, description='Unique id of the category')
+    id: str
     parent_category_id: Optional[IdModel] = None
     descriptor: Optional[Descriptor] = None
     time: Optional[Time] = None
-    tags: Optional[Tags] = None
+    tags: List[Tag] = []
 
 
 class FeedbackForm(BaseModel):
@@ -1492,7 +1519,7 @@ class Fulfillment(BaseModel):
     )
     end: Optional[End] = Field(None, description='Details on the end of fulfillment')
     rateable: Optional[Rateable] = None
-    tags: Optional[Tags] = None
+    tags: List[Tag] = []
 
 
 class Operator(Person):
@@ -1542,7 +1569,26 @@ class Provider(BaseModel):
         None, description='Time after which catalog has to be refreshed'
     )
     rateable: Optional[Rateable] = None
-    tags: Optional[Tags] = None
+    tags: List[Tag] = []
+
+
+class OnSearchProvider(BaseModel):
+    id: Union[str, int] = Field(..., description='Id of the provider')
+    descriptor: Optional[Descriptor] = None
+    category_id: Optional[str] = Field(None, description='Category Id of the provider')
+    rating: Optional[ValueModel] = None
+    time: Optional[Time] = None
+    categories: Optional[List[Category]] = None
+    fulfillments: Optional[List[Fulfillment]] = None
+    payments: Optional[List[Payment]] = None
+    locations: Optional[List[Location2]] = None
+    offers: Optional[List[Offer]] = None
+    items: Optional[List[OnSearchItem]] = Field(None, description='Item List', max_items=500, min_items=1)
+    exp: Optional[datetime] = Field(
+        None, description='Time after which catalog has to be refreshed'
+    )
+    rateable: Optional[Rateable] = None
+    tags: List[Tag] = []
 
 
 class Rating(BaseModel):
@@ -1597,7 +1643,7 @@ class Catalog(BaseModel):
     )
     bpp_payments: Optional[List[Payment]] = Field(None, alias='bpp/payments')
     bpp_offers: Optional[List[Offer]] = Field(None, alias='bpp/offers')
-    bpp_providers: List[Provider] = Field(..., alias='bpp/providers')
+    bpp_providers: List[OnSearchProvider] = Field(..., alias='bpp/providers', max_items=5, min_items=1)
     exp: Optional[datetime] = Field(
         None, description='Time after which catalog has to be refreshed'
     )
@@ -1606,17 +1652,6 @@ class Catalog(BaseModel):
 class Feedback(BaseModel):
     feedback_form: Optional[FeedbackForm] = None
     feedback_url: Optional[FeedbackUrl] = None
-
-
-class Intent(BaseModel):
-    descriptor: Optional[Descriptor] = None
-    provider: Optional[Provider] = None
-    fulfillment: Optional[Fulfillment] = None
-    payment: Optional[Payment] = None
-    category: Optional[Category] = None
-    offer: Optional[Offer] = None
-    item: Optional[Item] = None
-    tags: Optional[Tags] = None
 
 
 class ResolutionProvider(BaseModel):
