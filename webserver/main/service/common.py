@@ -32,7 +32,8 @@ def dump_request_payload(request_payload, domain, action=None):
         filter_criteria["context.bpp_id"] = request_payload['context']['bpp_id']
     request_payload['created_at'] = datetime.utcnow()
     update_data = {'$set': request_payload}
-    is_successful = mongo.collection_upsert_one(collection_name, filter_criteria, update_data)
+    is_successful = mongo.collection_upsert_one(
+        collection_name, filter_criteria, update_data)
     if is_successful:
         return get_ack_response(context=request_payload['context'], ack=True)
     else:
@@ -48,7 +49,8 @@ def get_network_request_payloads(**kwargs):
         message_ids = [x.strip() for x in v.split(",")]
         search_collection = get_mongo_collection(action)
         query_object = {"context.message_id": {"$in": message_ids}}
-        catalogs = mongo.collection_find_all(search_collection, query_object)["data"]
+        catalogs = mongo.collection_find_all(
+            search_collection, query_object)["data"]
         response[k] = catalogs
     return response
 

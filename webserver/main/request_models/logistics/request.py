@@ -51,7 +51,7 @@ class IssueMessage(BaseModel):
     @validator("issue")
     def validate_value(cls, v, values):
         """Validate each item"""
-        if v.issue.id is None:
+        if v.id is None:
             raise ValidationError("Issue id is missing!")
         return v
 
@@ -109,7 +109,7 @@ class OnIssueMessage(BaseModel):
     @validator("issue")
     def validate_value(cls, v, values):
         """Validate each item"""
-        if v.issue.id is None:
+        if v.id is None:
             raise ValidationError("Issue id is missing!")
         return v
 
@@ -120,7 +120,7 @@ class OnIssueStatusMessage(BaseModel):
     @validator("issue")
     def validate_value(cls, v, values):
         """Validate each item"""
-        if v.issue.order_details is None:
+        if v.order_details is None:
             raise ValidationError("Issue order_details is missing!")
         return v
 

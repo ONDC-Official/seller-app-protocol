@@ -290,7 +290,7 @@ class OnIssueRequest(BaseModel):
 
 class OnIssueStatusRequest(BaseModel):
     context: OnCallContext
-    message: dict
+    message: dict  # TODO: Use OnIssueStatusMessage, it is bypassed atm.
     error: Optional[Error]
 
 
