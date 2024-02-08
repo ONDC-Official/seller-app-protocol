@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from typing import Optional, Union, List
 from uuid import UUID
@@ -5,7 +6,8 @@ from uuid import UUID
 from pydantic import BaseModel, validator, ValidationError
 
 from main.request_models.retail.schema import Context, Catalog, Error, Order, Descriptor, Issue, Provider, Location, \
-    Item, AddOn, Offer, Quotation, Billing, Fulfillment, Payment, Rating, Tracking, RatingAck
+    Item, AddOn, Offer, Quotation, Billing, Fulfillment, Payment, Rating, Tracking, RatingAck, Domain, CodeModel, Code, \
+    Action
 
 
 class Status(Enum):
@@ -60,6 +62,23 @@ class IssueStatusMessage(BaseModel):
     issue_id: UUID
 
 
+class OnCallContext(BaseModel):
+    domain: Domain
+    country: CodeModel
+    city: Code
+    action: Action
+    core_version: str
+    bap_id: str
+    bap_uri: str
+    bpp_id: str
+    bpp_uri: str
+    transaction_id: str
+    message_id: str
+    timestamp: datetime
+    key: Optional[str]
+    ttl: Optional[Union[str, int]]
+
+
 class OnSearchMessage(BaseModel):
     catalog: Optional[Catalog]
 
@@ -85,7 +104,7 @@ class OnInitOrder(BaseModel):
     offers: Optional[List[Offer]]
     quote: Optional[Quotation]
     billing: Optional[Billing]
-    fulfillment: Optional[dict]
+    fulfillment: Optional[Fulfillment]
     payment: Optional[Payment]
 
 
@@ -169,7 +188,7 @@ class CancelRequest(BaseModel):
 
 class UpdateRequest(BaseModel):
     context: Context
-    message: dict
+    message: UpdateMessage
     error: Optional[Error]
 
 
@@ -198,80 +217,79 @@ class IssueStatusRequest(BaseModel):
 
 
 class OnSearchRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnSearchMessage
     error: Optional[Error]
 
     @validator("message")
-    def validate_value(cls, v, values):
-        """Validate each item"""
+    def validate_catalog(cls, v, values):
         if v.catalog is None:
             raise ValidationError("Catalog is missing!")
         return v
 
 
 class OnSelectRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnSelectMessage
     error: Optional[Error]
 
 
 class OnInitRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnInitMessage
     error: Optional[Error]
 
 
 class OnConfirmRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OrderMessage
     error: Optional[Error]
 
 
 class OnStatusRequest(BaseModel):
-    context: Context
-    message: dict
+    context: OnCallContext
+    message: OrderMessage
     error: Optional[Error]
 
 
 class OnTrackRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnTrackMessage
     error: Optional[Error]
 
 
 class OnCancelRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OrderMessage
     error: Optional[Error]
 
 
 class OnUpdateRequest(BaseModel):
-    context: Context
-    message: dict
+    context: OnCallContext
+    message: OrderMessage
     error: Optional[Error]
 
 
 class OnRatingRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: RatingAck
     error: Optional[Error]
 
 
 class OnSupportRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnSupportMessage
     error: Optional[Error]
 
 
 class OnIssueRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: OnIssueMessage
     error: Optional[Error]
 
 
 class OnIssueStatusRequest(BaseModel):
-    context: Context
+    context: OnCallContext
     message: dict  # TODO: Use OnIssueStatusMessage, it is bypassed atm.
     error: Optional[Error]
 
