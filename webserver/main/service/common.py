@@ -32,8 +32,8 @@ def dump_request_payload(request_payload, domain, action=None):
         filter_criteria["context.bpp_id"] = request_payload['context']['bpp_id']
     request_payload['created_at'] = datetime.utcnow()
     update_data = {'$set': request_payload}
-    is_successful = mongo.collection_upsert_one(
-        collection_name, filter_criteria, update_data)
+    is_successful = mongo.collection_upsert_one(collection_name, filter_criteria, update_data)
+    request_payload.pop('created_at')
     if is_successful:
         return get_ack_response(context=request_payload['context'], ack=True)
     else:
