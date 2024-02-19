@@ -35,11 +35,10 @@ def send_retail_payload_to_client(payload, request_type: OndcAction):
 
 
 @check_for_exception
-def send_retail_response_to_ondc_network(request_payload, request_type: OndcAction):
+def send_retail_response_to_ondc_network(request_payload, request_type: OndcAction, headers={}):
     if request_payload["context"]["action"] != "on_search":
         log(f"retail callback payload: {request_payload}")
     bap_endpoint = request_payload["context"]["bap_uri"]
-    resp, status_code = make_request_over_ondc_network(
-        request_payload, bap_endpoint, request_type.value)
+    resp, status_code = make_request_over_ondc_network(request_payload, bap_endpoint, request_type.value, headers)
     log(f"Sent responses to bg/bap with status-code {status_code}")
     return resp, status_code
