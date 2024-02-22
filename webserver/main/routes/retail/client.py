@@ -15,11 +15,13 @@ class OnSearchRequest(Resource):
 
     def post(self):
         request_payload = request.get_json()
+        search_type_header = request.headers.get('X-ONDC-Search-Response', 'full')
         resp = validate_payload_schema_based_on_version(request_payload, "on_search")
         dump_request_payload(request_payload, domain=OndcDomain.RETAIL.value, action=request_payload[constant.CONTEXT]["action"])
         if resp is None:
             action = request_payload["context"]["action"]
-            return send_retail_response_to_ondc_network(request_payload, request_type=OndcAction(action))
+            return send_retail_response_to_ondc_network(request_payload, request_type=OndcAction(action),
+                                                        headers={"X-ONDC-Search-Response": search_type_header})
         else:
             return resp
 

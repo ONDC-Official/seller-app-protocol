@@ -38,11 +38,12 @@ def password_hash(incoming_password):
     return h.hexdigest()
 
 
-def make_request_over_ondc_network(payload, end_point, action):
+def make_request_over_ondc_network(payload, end_point, action, headers={}):
     log(f"Making request over ondc network on {end_point} with action {action}")
     url_with_route = f"{end_point}{action}" \
         if end_point.endswith("/") \
         else f"{end_point}/{action}"
     auth_header = create_authorisation_header(payload)
-    response, status_code = post_on_bg_or_bap(url_with_route, payload, headers={'Authorization': auth_header})
+    headers['Authorization'] = auth_header
+    response, status_code = post_on_bg_or_bap(url_with_route, payload, headers=headers)
     return response, status_code
