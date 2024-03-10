@@ -24,7 +24,6 @@ class OnSearchRequest(Resource):
             log(f"On search request here is {request_payload['context']}")
             final_resp = dump_request_payload(request_payload, domain=OndcDomain.LOGISTICS.value,
                                               action=request_payload[constant.CONTEXT]["action"])
-            send_logistics_payload_to_client(request_payload, OndcAction.ON_SEARCH)
             return final_resp
         else:
             return resp
