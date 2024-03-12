@@ -29,6 +29,7 @@ def send_logistics_payload_to_client(payload, request_type: OndcAction):
 
 @check_for_exception
 def make_logistics_request(request_payload, request_type: OndcAction):
+    log(f"logistic request payload to network: {request_payload}")
     if request_payload['context']['action'] == "search":
         endpoint = fetch_gateway_url_from_lookup(domain=request_payload['context']['domain'])
     else:
