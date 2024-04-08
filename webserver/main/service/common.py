@@ -21,7 +21,7 @@ def get_responses_from_client(request_type, payload):
     else:
         client_endpoint = get_config_by_name('BPP_CLIENT_ENDPOINT')
     response = requests.post(f"{client_endpoint}/{request_type}", json=payload)
-    return json.loads(response.text), response.status_code
+    return json.loads(response.text) if response.status_code == 200 else None, response.status_code
 
 
 def dump_request_payload(request_payload, domain, action=None):

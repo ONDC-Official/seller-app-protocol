@@ -1,3 +1,4 @@
+from main import constant
 from main.logger.custom_logging import log
 from main.models import get_mongo_collection
 from main.models.ondc_request import OndcDomain, OndcAction
@@ -9,13 +10,26 @@ from main.utils.decorators import check_for_exception
 from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 
 
-def make_logistics_request_payload_request_to_client(payload, retail_type: OndcAction, logistics_type: OndcAction):
-    return get_responses_from_client(f"logistics/{logistics_type.value}-payload-for-retail-{retail_type.value}",
-                                     payload)
+def make_logistics_payload_request_to_client(payload, request_type: OndcAction):
+    if payload[constant.CONTEXT]["core_version"] != "1.2.0":
+        if "issue" in request_type.value:
+            return get_responses_from_client(f"client/logistics/{request_type.value}", payload)
+        return get_responses_from_client(f"v1/client/logistics/{request_type.value}", payload)
+    else:
+        return get_responses_from_client(f"v2/client/logistics/{request_type.value}", payload)
+
+
+@check_for_exception
+def send_logistics_payload_to_client(payload, request_type: OndcAction):
+    log(f"logistics payload to internal client: {payload}")
+    resp, return_code = make_logistics_payload_request_to_client(payload, request_type)
+    log(f"Got response {resp} from client with status-code {return_code}")
+    return resp, return_code
 
 
 @check_for_exception
 def make_logistics_request(request_payload, request_type: OndcAction):
+    log(f"logistic request payload to network: {request_payload}")
     if request_payload['context']['action'] == "search":
         endpoint = fetch_gateway_url_from_lookup(domain=request_payload['context']['domain'])
     else:
