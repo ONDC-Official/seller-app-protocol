@@ -34,28 +34,21 @@ class Config:
     BPP_ID = os.getenv("BPP_ID", "sellerapp-staging.datasyndicate.in")
     BPP_URI = os.getenv("BPP_URI", "https://sellerapp-staging.datasyndicate.in/")
     BPP_UNIQUE_KEY_ID = os.getenv("BPP_UNIQUE_KEY_ID", "351")
-    RABBITMQ_QUEUE_NAME = os.getenv("RABBITMQ_QUEUE_NAME", "bpp_protocol")
-    RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
     BPP_CLIENT_ENDPOINT = os.getenv("BPP_CLIENT_ENDPOINT", "client")
     IGM_CLIENT_ENDPOINT = os.getenv(
         "IGM_CLIENT_ENDPOINT", "http://seller-app-igm:8000/api")
     BG_DEFAULT_URL = os.getenv("BG_DEFAULT_URL", "https://staging.registry.ondc.org")
     BG_DEFAULT_URL_FLAG = os.getenv("BG_DEFAULT_URL_FLAG", "True") == "True"
     LOGISTICS_ON_SEARCH_WAIT = int(os.getenv("LOGISTICS_ON_SEARCH_WAIT", "3"))
-    PG_HOST = os.getenv('PG_HOST', 'localhost')
-    PG_PORT = os.getenv('PG_PORT', '5432')
-    PG_DATABASE = os.getenv('PG_DATABASE', 'practice')
-    PG_USER = os.getenv('PG_USER', 'postgres')
-    PG_PASSWORD = os.getenv('PG_PASSWORD', 'postgres')
     TTL_IN_SECONDS = int(os.getenv("TTL_IN_SECONDS", "3600"))
     VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "False") == "True"
+    REGISTRY_BASE_URL = os.getenv("REGISTRY_BASE_URL", "https://preprod.registry.ondc.org/ondc")
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     ENV = True
     RABBITMQ_HOST = "localhost"
-    REGISTRY_BASE_URL = "https://staging.registry.ondc.org"
     MONGO_DATABASE_HOST = "localhost"
     MONGO_DATABASE_PORT = 27017
     MONGO_DATABASE_NAME = "sandbox_bpp"
@@ -64,7 +57,6 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     RABBITMQ_HOST = "rabbitmq"
-    REGISTRY_BASE_URL = "https://staging.registry.ondc.org"
     MONGO_DATABASE_HOST = os.getenv("MONGO_DATABASE_HOST", "mongo")
     MONGO_DATABASE_PORT = int(os.getenv("MONGO_DATABASE_PORT", 27017))
     MONGO_DATABASE_NAME = os.getenv("MONGO_DATABASE_NAME", "sandbox_bpp")
@@ -73,7 +65,6 @@ class ProductionConfig(Config):
 class PreProductionConfig(Config):
     DEBUG = False
     RABBITMQ_HOST = "rabbitmq"
-    REGISTRY_BASE_URL = "https://preprod.registry.ondc.org/ondc"
     MONGO_DATABASE_HOST = os.getenv("MONGO_DATABASE_HOST", "mongo")
     MONGO_DATABASE_PORT = int(os.getenv("MONGO_DATABASE_PORT", 27017))
     MONGO_DATABASE_NAME = os.getenv("MONGO_DATABASE_NAME", "sandbox_bpp")

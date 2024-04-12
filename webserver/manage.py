@@ -8,7 +8,6 @@ from main.routes import api
 
 api.init_app(app)
 CORS(app)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if __name__ == "__main__":
     if os.getenv("ENV") is not None:

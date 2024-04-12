@@ -1,9 +1,6 @@
 from main import constant
 from main.logger.custom_logging import log
-from main.models import get_mongo_collection
-from main.models.ondc_request import OndcDomain, OndcAction
-from main.repository import mongo
-from main.repository.db import get_first_ondc_request
+from main.models.ondc_request import OndcAction
 from main.service.common import get_responses_from_client
 from main.service.utils import make_request_over_ondc_network
 from main.utils.decorators import check_for_exception

@@ -1,9 +1,5 @@
 import enum
 
-from main.models.init_database import dbBase
-from sqlalchemy import Column, Integer, String, DateTime, Enum, Float, JSON
-
-
 class OndcAction(enum.Enum):
     SEARCH = "search"
     SELECT = "select"
@@ -36,13 +32,3 @@ class OndcAction(enum.Enum):
 class OndcDomain(enum.Enum):
     RETAIL = "retail"
     LOGISTICS = "logistics"
-
-
-class OndcRequest(dbBase):
-    __tablename__ = 'ondc_request'
-    id = Column(Integer, primary_key=True)
-    action = Column(Enum(OndcAction))
-    domain = Column(Enum(OndcDomain))
-    message_id = Column(String(50))
-    request = Column(JSON)
-    created_at = Column(DateTime)

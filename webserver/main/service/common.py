@@ -4,15 +4,11 @@ from datetime import datetime
 import requests
 
 from main.config import get_config_by_name
-from main.logger.custom_logging import log
 from main.models import get_mongo_collection
 from main.models.error import DatabaseError
-from main.models.ondc_request import OndcDomain, OndcAction, OndcRequest
+from main.models.ondc_request import OndcDomain
 from main.repository import mongo
 from main.repository.ack_response import get_ack_response
-from main.repository.db import get_ondc_requests
-from main.utils.decorators import check_for_exception
-from main.utils.webhook_utils import post_count_response_to_client
 
 
 def get_responses_from_client(request_type, payload):
@@ -60,19 +56,3 @@ def get_active_ondc_requests():
     query_object = {"message.intent.tags.code": "catalog_inc"}
     catalogs = mongo.collection_find_all(search_collection, query_object)
     return catalogs
-
-
-@check_for_exception
-def send_logistics_on_call_count_to_client(request_payload, request_type="on_search"):
-    on_call_message_id = request_payload['context']['message_id']
-    on_call_requests = get_ondc_requests(
-        OndcDomain.LOGISTICS, OndcAction(request_type), on_call_message_id)
-    on_call_requests_count = len(on_call_requests)
-    on_call_transaction_id = on_call_requests[0]['context'][
-        'transaction_id'] if on_call_requests_count > 0 else None
-    post_count_response_to_client(request_type,
-                                  {
-                                      "messageId": on_call_message_id,
-                                      "transactionId": on_call_transaction_id,
-                                      "count": on_call_requests_count,
-                                  })

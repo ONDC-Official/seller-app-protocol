@@ -8,62 +8,19 @@ services:
       dockerfile: dockerfile
     container_name: bpp-protocol-webserver
     depends_on:
-      - rabbitmq
       - mongo
     environment:
       ENV: prod
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
       BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
       BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
       BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
       BPP_ID: ${BPP_ID}
-      PG_HOST: ${PG_HOST}
-      PG_PORT: ${PG_PORT}
-      PG_DATABASE: ${PG_DATABASE}
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      FLASK_SERVER: "True"
+      MONGO_DATABASE_HOST: ${MONGO_DATABASE_HOST}
+      REGISTRY_BASE_URL: ${REGISTRY_BASE_URL}
     expose:
       - 5555
     ports:
       - 5555:5555
-
-
-  bpp-protocol-consumer:
-    build:
-      context: .
-      dockerfile: consumer_dockerfile
-    container_name: bpp-protocol-consumer
-    depends_on:
-      - rabbitmq
-      - mongo
-    environment:
-      ENV: prod
-      RABBITMQ_HOST: ${RABBITMQ_HOST}
-      BPP_PRIVATE_KEY: ${BPP_PRIVATE_KEY}
-      BPP_PUBLIC_KEY: ${BPP_PUBLIC_KEY}
-      BPP_UNIQUE_KEY_ID: ${BPP_UNIQUE_KEY_ID}
-      BPP_CLIENT_ENDPOINT: ${BPP_CLIENT_ENDPOINT}
-      BPP_ID: ${BPP_ID}
-      PG_HOST: ${PG_HOST}
-      PG_PORT: ${PG_PORT}
-      PG_DATABASE: ${PG_DATABASE}
-      PG_USER: ${PG_USER}
-      PG_PASSWORD: ${PG_PASSWORD}
-      FLASK_SERVER: "False"
-
-
-  rabbitmq:
-    image: rabbitmq:3.10-management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-
 
   mongo:
     image: mongo
