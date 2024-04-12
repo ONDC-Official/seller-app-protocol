@@ -17,6 +17,7 @@ services:
       BPP_ID: ${BPP_ID}
       MONGO_DATABASE_HOST: ${MONGO_DATABASE_HOST}
       REGISTRY_BASE_URL: ${REGISTRY_BASE_URL}
+      VERIFICATION_ENABLE: ${VERIFICATION_ENABLE}
     expose:
       - 5555
     ports:

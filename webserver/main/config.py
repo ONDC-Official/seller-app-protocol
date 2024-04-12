@@ -41,7 +41,7 @@ class Config:
     BG_DEFAULT_URL_FLAG = os.getenv("BG_DEFAULT_URL_FLAG", "True") == "True"
     LOGISTICS_ON_SEARCH_WAIT = int(os.getenv("LOGISTICS_ON_SEARCH_WAIT", "3"))
     TTL_IN_SECONDS = int(os.getenv("TTL_IN_SECONDS", "3600"))
-    VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "False") == "True"
+    VERIFICATION_ENABLE = os.getenv("VERIFICATION_ENABLE", "True") == "True"
     REGISTRY_BASE_URL = os.getenv("REGISTRY_BASE_URL", "https://preprod.registry.ondc.org/ondc")
 
 
