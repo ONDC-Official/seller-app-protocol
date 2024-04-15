@@ -1,13 +1,9 @@
 from main import constant
 from main.logger.custom_logging import log
-from main.models import get_mongo_collection
-from main.models.ondc_request import OndcAction, OndcDomain
-from main.repository import mongo
-from main.repository.db import get_first_ondc_request
+from main.models.ondc_request import OndcAction
 from main.service.common import get_responses_from_client
 from main.service.utils import make_request_over_ondc_network
 from main.utils.decorators import check_for_exception
-from main.utils.lookup_utils import fetch_gateway_url_from_lookup
 
 
 def make_retail_payload_request_to_client(payload, request_type: OndcAction):
